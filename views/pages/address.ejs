@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <% include ../partials/head %>
+</head>
+
+<body>
+  <div id="wrapper">
+    <% include ../partials/sidebar %>
+      <div id="page-wrapper" class="gray-bg">
+        <% include ../partials/header %>
+          <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-9">
+              <h2></h2>
+              <ol class="breadcrumb">
+                <li>
+                  <a href="/dashboard" class="hom">Home</a>
+                </li>
+                <li class="active">
+                  <strong class="addr">Address</strong>
+                </li>
+              </ol>
+            </div>
+          </div>
+          <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+              <div class="col-lg-6 text-center">
+                <div class="ibox collapsed">
+                  <div class="ibox-title">
+                    <h3 class="font-bold">
+                      <span>
+                            <span class="tb">Total Balance</span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+                              <span><%= tokenBal %></span> &nbsp;&nbsp;
+                      <span class="text-danger ">GEM</span> &nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;&nbsp;&nbsp;
+                      <%= usdBal %>
+                        </span>&nbsp;&nbsp;
+                        <span class="text-danger ">USD</span>
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 text-center">
+                <div class="ibox collapsed">
+                  <div class="ibox-title">
+                    <h3 class="font-bold">
+                      <span>
+                            <span class="eb">Ether Balance</span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= ethBal %>
+                          </span>&nbsp;&nbsp;
+                      <span class="text-danger ">ETH</span>
+                      <span>&nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                      <span><%= usdEthBal %></span>&nbsp;&nbsp;
+                      <span class="text-danger ">USD</span>
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                  <div class="ibox-title">
+                    <h5 class="accadd">Account Address</h5>
+                    <div class="ibox-tools">
+                    </div>
+                    <div class="ibox-content">
+                      <div class="row">
+                        <div class="col-sm-6 b-r">
+                          <br>
+                          <p style="font-size:20px;" class="epa">Ethereum Public Address</p>
+                          <small class="ytaew">Your Tokens and Ether will be here in this address.</small><br><br>
+                          <div title="Copy URL to clipboard" class="dd-handle paddingKey" style="font-size:16px;" id="copy" data-clipboard-target="#eth-address">
+                            <span id="eth-address"><%= etherAddress %></span>
+                            <span class="pull-right"><i class="fa fa-copy resy" style="font-size:28px;"></i></span>
+                          </div>
+                          <br><br>
+                          <p><span class="wto">Want To</span>
+                            <a class="font-bold text-success" data-toggle="modal" data-target="#privateModal">
+                              <u class="buw">Backup Your Wallet?</u>
+                            </a>
+                          </p>
+                        </div>
+                        <div class="col-sm-6">
+                          <center class="QrImage">
+                            <img src="<%= qrImage %>" style="width:200px; height:200px;">
+                          </center>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% include ../partials/footer %>
+      </div>
+  </div>
+  <div class="modal fade" id="privateModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" onclick="backupWallet('Hide')" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title bacWa">Wallet Backup</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row text-center m-b-sm">
+            <h3 class=" text-center m-t-none m-b-none RetTPK">Retrieve The Private Key</h3>
+            <p class="text-danger m-t-lg m-b-lg NoDy">Note down your Private Key in a safe place. This will be used to restore your wallet and keep your funds safe.</p>
+            <h3 class="text-danger m-b-lg plEY" id="above-input-text">Please Enter your login credentials to Continue</h3>
+          </div>
+          <div id="privkey-input">
+            <form role="form" method="POST">
+              <div class="form-group">
+                <div class="input-group date">
+                  <input type="email" class="form-control" id="login_email" placeholder="Enter Registered Mail ID" required>
+                  <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group date">
+                  <input type="password" class="form-control" id="login_password" placeholder="Enter Password" required>
+                  <span class="input-group-addon"><i style="font-size:18px; padding-left:1px; padding-right:1px;" class="fa fa-lock"></i></span>
+                </div>
+              </div>
+              <div class="form-group text-center">
+                <a class="btn btn-sm btn-primary m-t-xs" href="javascript:backupWallet('Retrieve')" type="submit" id="getPrivButton"><strong class="GoPK">Get Private Key</strong></a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% include ../partials/profile %>
+</body>
+<% include ../partials/script %>
+  <script src="/lib/js/sha256.min.js"></script>
+  <script src="/lib/js/plugins/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $('#side-menu li:nth-child(3)').addClass('active');
+      $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+      });
+    });
+    var isFirst = true;
+    var socket = io('https://', {secure: true});
+      socket.on('transfer', function (result) {
+        if(result.data.args.to == '<%= etherAddress %>' && isFirst) {
+          toastr.clear();
+          toastr.options = {};
+          toastr.success(`You have been credited with ${parseFloat(result.data.args.value)/10000} tokens.`);
+          isFirst = false;
+          setTimeout(function() {
+            location.reload();
+          }, 3000);
+        }
+    });
+    var clipboard = new Clipboard('#copy');
+    clipboard.on('success', function (e) {
+      toastr.success("Address Copied to Clipboard");
+    });
+    clipboard.on('error', function (e) {
+      toastr.success("Unable to Copy to Clipboard");
+    });
+  </script>
+
+</html>

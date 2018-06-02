@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <% include ../partials/head %>
+    <style type="text/css">
+        .footer{
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="trans" class="localizationTool" style="display:none;"></div>
+        <div class="middle-box text-center loginscreen animated fadeInDown">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <img src="/img/logo.png" class="logoImg" />
+                    <h2 class="font-bold text-center">
+                        <%- heading %>
+                    </h2>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div>
+                            <p>
+                                <%- message %>
+                            </p>
+                        </div>
+                        <a class="text-center" href="<%= linkHref %>">
+                            <%- linkText %>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <% include ../partials/footer %>
+</body>
+<% include ../partials/script %>
+</html>

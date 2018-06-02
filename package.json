@@ -1,0 +1,53 @@
+{
+  "name": "GemBank",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "bignumber": "^1.1.0",
+    "bluebird": "^3.5.0",
+    "body-parser": "~1.17.1",
+    "coinpayments": "^1.1.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "dotenv": "^5.0.1",
+    "ejs": "~2.5.6",
+    "express": "~4.15.2",
+    "express-session": "^1.15.5",
+    "express-validator": "^3.2.1",
+    "file-system": "^2.2.2",
+    "keythereum": "^1.0.2",
+    "mongodb": "^2.2.30",
+    "mongoose": "^4.11.5",
+    "morgan": "~1.8.1",
+    "nodemailer": "^4.0.1",
+    "qrcode": "^0.9.0",
+    "randomstring": "^1.1.5",
+    "serve-favicon": "~2.4.2",
+    "socket.io": "^2.0.3",
+    "web3": "^0.19.1"
+  },
+  "description": "Wallet For Solomonex Coin",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/devgenesis/MetaxWallet.git"
+  },
+  "keywords": [
+    "NPM",
+    "Metax",
+    "Solidity",
+    "Blockchain",
+    "Wallet"
+  ],
+  "author": "Malay Tripathi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/lkdev/metaxWallet/issues"
+  },
+  "homepage": "https://gitlab.com/lkdev/metaxWallet#README"
+}

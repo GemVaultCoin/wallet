@@ -1,0 +1,450 @@
+<script src="/lib/js/jquery-3.1.1.min.js"></script>
+<script src="/lib/js/bootstrap.min.js"></script>
+<script src="/lib/js/axios.min.js"></script>
+<script src="/lib/js/inspinia.js"></script>
+<script src="/lib/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="/lib/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/lib/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="/lib/js/plugins/toastr/toastr.min.js"></script>
+<script src="/lib/js/plugins/iCheck/icheck.min.js"></script>
+<script src="/lib/js/plugins/flot/jquery.flot.js"></script>
+<script src="/lib/js/plugins/socket/socket.io.slim.js"></script>
+<script src="/js/toastrMassage.js"></script>
+<script src="/js/main.js"></script>
+<!-- 6. Add localizationTool.js after jQuery -->
+<script src="/jquery.localizationTool.min.js"></script>
+<!-- Flag click handler -->
+<script type="text/javascript">
+    $("#trans").localizationTool({
+      'defaultLanguage' : 'en_GB', /* (optional) although must be defined if you don't want en_GB */
+      'showFlag': true,            /* (optional) show/hide the flag */
+      'showCountry': false,         /* (optional) show/hide the country name */
+      'showLanguage': false,        /* (optional) show/hide the country language */
+      'onLanguageSelected' : function (languageCode) {
+            /*
+             * When the user translates we set the cookie
+             */
+            localStorage.setItem("userLanguage",languageCode);
+            return true;
+        },
+         strings: {
+            "class:qn-h":{
+                zh_CN:"常见问题(FAQ)"
+            },
+             "class:q-1" : {
+                 zh_CN : "GemBank Exchange (GEM)的令牌吗?"
+             },
+             "class:ans-1":{
+                 zh_CN : "的目的是所罗门群岛的交流令牌或 GEM 是作为货币的所罗门群岛的交流项目。 它们的保存价值和安全的支付工具的交易。 使用所罗门交流将使您能够参加交易的加密的货币和贸易的任何当地的货币。 该令牌 GEM 还将可以交易的第三方 cryptocurrency 交流以及 Somolon 交换。"
+             },
+             "class:q-2" : {
+                 zh_CN : "如何 GEM 令牌创建的吗?"
+             },
+             "class:ans-2":{
+                 zh_CN : "的目的是所罗门群岛的交流令牌或 GEM 是作为货币的所罗门群岛的交流项目。 它们的保存价值和安全的支付工具的交易。 使用所罗门交流将使您能够参加交易的加密的货币和贸易的任何当地的货币。 该令牌 GEM 还将可以交易的第三方 cryptocurrency Somolon exchange.。"
+             },
+             "class:q-3" : {
+                 zh_CN : "我如何购买 GEM 令牌吗?"
+             },
+             "class:ans-3":{
+                 zh_CN : "说明参与 ICO 的 GEM 令牌将公布在我们的 ICO 网页开始 12:00 UTC 28 2017 8月。 每个投资者可以访问我们的 ICO 网页在那里出售的说明将被公布。 ICO 销售管理将由 Ethereum 的智能的合同。 只有在 ICO、GEM 令牌将在静态的价格为 1。 价格稍后将由市场的供求力量开始工作后的令牌都在流通。 所有购买 GEM 令牌将被立即从合同到您的电子钱包 Ethereum 后购买。"
+             },
+             "class:q-4" : {
+                 zh_CN : "当我在哪里可以交易我的令牌?"
+             },
+             "class:ans-4":{
+                 zh_CN : "令牌将能够提供贸易对我们的合作伙伴 cryptocurrency 交流。 令牌将开始出现在交流结束之后的 ICO 的周期。 请参阅我们的蓝图在我们的白皮书。"
+             },
+             "class:q-5" : {
+                 zh_CN : "什么 cryptocurrencies 我可以使用购买 GEM 令牌吗?"
+             },
+             "class:ans-5":{
+                 zh_CN : "目前, 投资者可以购买他们的令牌使用以太网(ETH)和 Bitcoin (BATTERY) (XBT9E1))。 在这种情况下, 您将需要提供的地址 Ethereum 钱包收到 GEM 的令牌。 您必须使用电子钱包, 支持紧急救济协调员 Ethereum20 合同。 请勿使用第三方的电子钱包 Ethereum 地址, 如第三方的交流, 收到您的令牌。"
+             },
+             "class:q-6" : {
+                 zh_CN : "我怎样才能保持最新的 GEM 新闻?"
+             },
+             "class:ans-6":{
+                 zh_CN : "投资者将会通知有关的所有活动和重要事件的有关项目 GEM 通过电子邮件发送新闻简报和信息发布在我们的社会媒体帐户"
+             },
+             "class:r1":{
+                zh_CN:"儀表板"
+             },
+             "class:r2":{
+                zh_CN:"公有地址"
+             },
+             "class:r3":{
+                zh_CN:"事务历史记录"
+             },
+             "class:r4":{
+                zh_CN:"发送 顯示 /乙醚"
+             },
+            "class:fq":{
+                zh_CN:"常见问题解答"
+             },
+             "class:cp":{
+                zh_CN:"版权所有© 2017"
+             },
+             "class:se":{
+                zh_CN:"所罗门 交換"
+             },
+             "class:pb":{
+                zh_CN:"供電"
+             },
+             "class:issu":{
+                zh_CN:"问题吗?"
+             },
+             "class:hom":{
+                zh_CN:"主页"
+             },
+             "class:tb":{
+                zh_CN:"总的平衡"
+             },
+             "class:eb":{
+                zh_CN:"Ether 平衡"
+             },
+             "class:sysmx":{
+                zh_CN:"顯示"
+             },
+             "class:syusd":{
+                zh_CN:"美元"
+             },
+             "class:syeth":{
+                zh_CN:"以太网"
+             },
+             "class:sybtc":{
+                zh_CN:"BTC"
+             },
+             "class:bsmx":{
+                zh_CN:"购买 GEM"
+             },
+             "class:pumo":{
+                zh_CN:"购买模式。"
+             },
+             "class:hms":{
+                zh_CN:"多少 GEM"
+             },
+             "class:iat":{
+                zh_CN:"我接受"
+             },
+             "class:tac":{
+                zh_CN:"条款与条件"
+             },
+             "class:tlec":{
+                zh_CN:"时间离开结束人群"
+             },
+             "class:das":{
+                zh_CN:"天"
+             },
+             "class:hor":{
+                zh_CN:"小时"
+             },
+             "class:mintu":{
+                zh_CN:"分钟"
+             },
+             "class:secon":{
+                zh_CN:"秒数。"
+             },
+             "class:purb":{
+                zh_CN:"购买"
+             },
+             "class:pconf":{
+                zh_CN:"付款确认"
+             },
+             "class:confib":{
+                zh_CN:"确认"
+             },
+             "class:canb":{
+                zh_CN:"取消"
+             },
+             "class:yhrtp":{
+                zh_CN:"您已请求购买"
+             },
+             "class:curr":{
+                zh_CN:"当前的"
+             },
+             "class:load":{
+                zh_CN:"正在加载..."
+             },
+             "class:smxso":{
+                zh_CN:"GEM 顯示"
+             },
+             "class:amrai":{
+                zh_CN:"金额"
+             },
+             "class:smxho":{
+                zh_CN:"GEM 持有人"
+             },
+             "class:smxwu":{
+                zh_CN:"GEM 持有人"
+             },
+             "class:rates":{
+                zh_CN:"价格"
+             },
+             "class:smpri":{
+                zh_CN:"GEM 价格"
+             },
+             "class:sinfm":{
+                zh_CN:"现在登录有更多的经验。"
+             },
+             "class:notam":{
+                zh_CN:"是会员吗？"
+             },
+             "class:ycca":{
+                zh_CN:"您可以创建一个帐户:"
+             },
+             "class:fyp":{
+                zh_CN:"忘记了您的密码吗?"
+             },
+             "class:sgi":{
+                zh_CN:"登录"
+             },
+             "class:lgi":{
+                zh_CN:"登录"
+             },
+             "class:sigu":{
+                zh_CN:"注册"
+             },
+             "class:nam":{
+                zh_CN:"对我们来说"
+             },
+             "class:passw":{
+                zh_CN:"密码"
+             },
+             "class:conpa":{
+                zh_CN:"确认密码"
+             },
+             "class:phon":{
+                zh_CN:"电话号码"
+             },
+             "class:subm":{
+                zh_CN:"提交"
+             },
+             "class:emai":{
+                zh_CN:"电子邮件"
+             },
+             "class:addr":{
+                zh_CN:"地址"
+             },
+             "class:accadd":{
+                zh_CN:"个人帐户地址"
+             },
+             "class:epa":{
+                zh_CN:"爱心公共广播"
+             },
+             "class:ytaew":{
+                zh_CN:"您的令牌和Ether将在此地址中。"
+             },
+             "class:wto":{
+                zh_CN:"想要"
+             },
+             "class:buw":{
+                zh_CN:"备份您的钱包？"
+             },
+             "class:tranhi":{
+                zh_CN:"交易历史"
+             },
+             "class:tranfhi":{
+                zh_CN:"转移历史记录"
+             },
+             "class:tranText":{
+                zh_CN:"付款后，您需要等待交易处理。这需要10-20分钟。付款完成后，您将收到付款通知。如果您没有完全付款，您将收到待付款通知。如果您已经全额付款，您将收到一封电子邮件通知，之后您的令牌将记入您的帐户。"
+             },
+             "class:snl":{
+                zh_CN:"序列号"
+             },
+             "class:dal":{
+                zh_CN:"日期"
+             },
+             "class:inol":{
+                zh_CN:"进/出"
+             },
+             "class:frol":{
+                zh_CN:"从"
+             },
+             "class:tol":{
+                zh_CN:"至"
+             },
+             "class:txhl":{
+                zh_CN:"交易 哈希"
+             },
+             "class:vall":{
+                zh_CN:"值"
+             },
+             "class:senl":{
+                zh_CN:"发送"
+             },
+             "class:stcywt":{
+                zh_CN:"选择您要发送的货币"
+             },
+             "class:ethe":{
+                zh_CN:"醚"
+             },
+             "class:amou":{
+                zh_CN:"数量"
+             },
+             "class:proc":{
+                zh_CN:"继续"
+             },
+             "class:confir":{
+                zh_CN:"确认"
+             },
+             "class:yaats":{
+                zh_CN:"你即将发送"
+             },
+             "class:profi":{
+                zh_CN:"轮廓"
+             },
+             "class:logou":{
+                zh_CN:"登出"
+             },
+             "class:usde":{
+                zh_CN:"用户详细信息"
+             },
+             "class:perinfo":{
+                zh_CN:"个人信息"
+             },
+             "class:sachbtn":{
+                zh_CN:"保存更改"
+             },
+             "class:twf":{
+                zh_CN:"保存更改"
+             },
+             "class:ere":{
+                zh_CN:"输入注册邮箱"
+             },
+             "class:grl":{
+                zh_CN:"获取恢复链接"
+             },
+             "class:forptext":{
+                zh_CN:"输入您的注册邮件ID。 我们将发送密码恢复电子邮件到邮件ID。 请按照说明重设密码"
+             },
+             "class:forp":{
+                zh_CN:"忘记密码？"
+             },
+             "class:bsmc":{
+                zh_CN:"购买 GEM 硬币"
+             },
+             "class:payDe":{
+                zh_CN:"付款详情"
+             },
+             "class:tmts":{
+                zh_CN:"总金额："
+             },
+             "class:tcn":{
+                zh_CN:"总共确认需要："
+             },
+             "class:sta":{
+                zh_CN:"发送到地址："
+             },
+             "class:tranI":{
+                zh_CN:"交易编号："
+             },
+             "class:selna":{
+                zh_CN:"卖家名称："
+             },
+             "class:sele":{
+                zh_CN:"卖家电邮："
+             },
+             "class:cps":{
+                zh_CN:"检查付款状态"
+             },
+             "class:bscm":{
+                zh_CN:"付款后，您需要等待交易处理。 需要10-20分钟。 付款完成后，您将收到付款通知。 如果您没有完全付款，您将收到待付款通知。 如果您已经全额付款，您将收到一封电子邮件通知，之后您的令牌将记入您的帐户。"
+             },
+             "class:hitw":{
+                zh_CN:"（如何运作？看这个）"
+             },
+             "class:econb":{
+                zh_CN:"早期贡献者奖金"
+             },
+             "class:f3d":{
+                zh_CN:"第一天"
+             },
+             "class:f7d":{
+                zh_CN:"第一天七天"
+             },
+             "class:f3dm1":{
+                zh_CN:"（2017年8月28日12:00 UTC -31八月2017 12:00 UTC）20％免费GEM"
+             },
+             "class:f3dm2":{
+                zh_CN:"（2017年8月31日12:01 UTC -7 九月 2017 12:00 UTC）15％免费GEM"
+             },
+             "class:f3dm3":{
+                zh_CN:"（2017年9月7日12:01 UTC -14 九月 2017 12:00 UTC）10％免费GEM"
+             },
+             "class:f3dm4":{
+                zh_CN:"（2017年9月14日12:01 UTC -21九月2017 12:00 UTC）5％免费GEM"
+             },
+             "class:bacWa":{
+                zh_CN:"钱包备份"
+             },
+             "class:RetTPK":{
+                zh_CN:"检索私钥"
+             },
+             "class:NoDy":{
+                zh_CN:"在安全的地方注意你的私钥。 这将用于恢复您的钱包，并保持您的资金安全。"
+             },
+             "class:GoPK":{
+                zh_CN:"获取私钥"
+             },
+             "class:plEY":{
+                zh_CN:"请输入您的登录凭据以继续"
+             },
+             "class:resPass":{
+                zh_CN:"重设密码"
+             },
+             "class:PenYPad":{
+                zh_CN:"请输入您的新密码。 不要使用您以前的密码"
+             },
+             "class:paNf":{
+                zh_CN:"找不到网页"
+             },
+             "class:sorBuTrche":{
+                zh_CN:"对不起，您尚未找到您要寻找的页面。 尝试检查URL的错误，然后按浏览器上的刷新按钮或尝试在我们的应用程序中找到其他内容。"
+             },
+             "class:InseE":{
+                zh_CN:"内部服务器错误"
+             },
+             "class:ThSEn":{
+                zh_CN:"服务器遇到意外事件，不允许完成请求。 我们抱歉。"
+             },
+             "class:ycGb":{
+                zh_CN:"你可以回到主页："
+             },
+             "class:cliH":{
+                zh_CN:"点击这里"
+             },
+             "class:sessEx":{
+                zh_CN:"会话已过期！"
+             },
+             "class:seSLoginMess":{
+                zh_CN:"您的会话已过期 请重新登录以继续。"
+             },
+             "class:HeLogin":{
+                zh_CN:"点击此处登录"
+             },
+             "class:LogSucc":{
+                zh_CN:"注销成功！"
+             },
+             "class:LogOuMes":{
+                zh_CN:"您已成功注销。 请访问登录页面重新登录。"
+             },
+             "class:r5":{
+                zh_CN:"推荐电子邮件"
+             },
+             "class:Res_ver_text":{
+                zh_CN:"重新发送验证链接"
+             },
+             "class:forp_Res_ver_text":{
+                 zh_CN:"输入您注册的邮箱，将向您重新发送激活链接"
+             }
+         }
+     });
+
+    var userLanguage = localStorage.getItem("userLanguage");
+    if (userLanguage !== null) {
+        $('#trans').localizationTool('translate', userLanguage);
+    }
+    $('body').show();
+</script>

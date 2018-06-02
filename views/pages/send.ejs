@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <% include ../partials/head %>
+</head>
+
+<body>
+  <div id="wrapper">
+    <% include ../partials/sidebar %>
+      <div id="page-wrapper" class="gray-bg">
+        <% include ../partials/header %>
+          <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-9">
+              <h2></h2>
+              <ol class="breadcrumb">
+                <li>
+                  <a href="/dashboard" class="hom">Home</a>
+                </li>
+                <li class="active">
+                  <strong class="senl">Send</strong>
+                </li>
+              </ol>
+            </div>
+          </div>
+          <div class="wrapper wrapper-content animated fadeInRight">
+              <div class="row">
+                  <div class="col-lg-6 text-center">
+                    <div class="ibox collapsed">
+                      <div class="ibox-title">
+                        <h3 class="font-bold">
+                          <span>
+                            <span class="tb">Total Balance</span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+                              <span><%= tokenBal %></span> &nbsp;&nbsp;
+                          <span class="text-danger">GEM</span> &nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;&nbsp;&nbsp;
+                          <%= usdBal %>
+                            </span>&nbsp;&nbsp;
+                            <span class="text-danger">USD</span>
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 text-center">
+                    <div class="ibox collapsed">
+                      <div class="ibox-title">
+                        <h3 class="font-bold">
+                          <span>
+                            <span class="eb">Ether Balance</span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= ethBal %>
+                          </span>&nbsp;&nbsp;
+                          <span class="text-danger">ETH</span>
+                          <span>&nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                          <span><%= usdEthBal %></span>&nbsp;&nbsp;
+                          <span class="text-danger">USD</span>
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                  <div class="ibox-title">
+                    <h5 class="senl">Send</h5>
+                    <div class="ibox-tools">
+                    </div>
+                    <div class="ibox-content">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <h2 class="text-danger text-center font-bold stcywt">Select The Currency You Want To Send</h2>
+                          <div class="text-center" style="margin-top:20px;margin-bottom: 40px;">
+                            <div class="radio radio-info radio-inline">
+                              <input type="radio" id="inlineRadio1" value="GEM" name="radioInline" checked="">
+                              <label for="inlineRadio1" >GEM</label>
+                            </div>
+                            <div class="radio radio-success radio-inline">
+                              <input type="radio" id="inlineRadio2" value="ETH" name="radioInline">
+                              <label for="inlineRadio2">Ether</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="sendForm">
+                          <form id = "sendCurrencyForm">
+                            <div class="form-group col-md-5">
+                              <label class="addr">Address</label>
+                              <input type="text" placeholder="Enter Receiver's Address" id='address' address='name' class="form-control" required autocomplete="off" maxlength="42">
+                            </div>
+                            <div class="form-group col-md-5">
+                              <label class="amou">Amount</label>
+                              <input type="text" placeholder="Enter Amount" id='amount' name='amount' class="form-control" required autocomplete="off">
+                            </div><br>
+                            <div class="form-group col-md-2 text-center" style="margin-top:30px;">
+                              <span class="btn btn-block btn-primary m-t-n-xs" data-target="#confirmModal" onclick="sendCurrency('confirm')"><strong class="proc">Proceed</strong></span>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="confirmModal" role="dialog" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-lg">
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title confir">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center"><span class="yaats">You are about to send</span>&nbsp;<br><span id="currency" class="text-danger font-bold"></span><br>to<br><span id="recvAddress" class="text-danger font-bold"></span></p>
+                </div>
+                <div class="modal-footer" style="text-align:center;">
+                  <button type="button" class="btn btn-primary confib" onclick="sendCurrency('proceed')" id="confirmButton">Confirm</button>
+                  <button type="button" class="btn btn-danger canb" onclick="sendCurrency('cancel')" id="cancelButton">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% include ../partials/footer %>
+      </div>
+  </div>
+  <% include ../partials/profile %>
+</body>
+<% include ../partials/script %>
+<script type="text/javascript" src="js/numeral.min.js"></script>
+<script src="/lib/js/sha256.min.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $('#side-menu li:nth-child(5)').addClass('active');
+      $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+      });
+    });
+    var isFirst = true;
+    // var socket = io('https://', {secure: true});
+    //   socket.on('transfer', function (result) {
+    //     if(result.data.args.to == '<%= etherAddress %>' && isFirst) {
+    //       toastr.clear();
+    //       toastr.options = {};
+    //       toastr.success(`You have been credited with ${parseFloat(result.data.args.value)/10000} tokens.`);
+    //       isFirst = false;
+    //       setTimeout(function() {
+    //         location.reload();
+    //       }, 3000);
+    //     }
+    // });
+  </script>
+
+</html>

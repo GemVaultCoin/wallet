@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>
+		<%= title %>
+	</title>
+	<% include ../partials/head %>
+</head>
+
+<body>
+	<div id="wrapper">
+		<% include ../partials/sidebar %>
+			<div id="page-wrapper" class="gray-bg">
+				<% include ../partials/header %>
+					<div class="row wrapper border-bottom white-bg page-heading">
+						<div class="col-lg-9">
+							<h2></h2>
+							<ol class="breadcrumb">
+								<li>
+									<a href="/dashboard" class="hom">Home</a>
+								</li>
+								<li class="active">
+									<strong class="tranhi">Transaction History</strong>
+								</li>
+							</ol>
+						</div>
+					</div>
+					<div class="wrapper wrapper-content animated fadeInRight">
+						<div class="row">
+							<div class="col-lg-6 text-center">
+								<div class="ibox collapsed">
+									<div class="ibox-title">
+										<h3 class="font-bold">
+											<span>
+											  <span class="tb">Total Balance</span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+												<span><%= tokenBal %></span> &nbsp;&nbsp;
+											<span class="text-danger ">GEM</span> &nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;&nbsp;&nbsp;
+											<%= usdBal %>
+												</span>&nbsp;&nbsp;
+												<span class="text-danger ">USD</span>
+										</h3>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6 text-center">
+								<div class="ibox collapsed">
+									<div class="ibox-title">
+										<h3 class="font-bold">
+											<span>
+											  <span class="eb">Ether Balance</span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= ethBal %>
+											</span>&nbsp;&nbsp;
+											<span class="text-danger ">ETH</span>
+											<span>&nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;&nbsp;&nbsp;&nbsp;</span>
+											<span><%= usdEthBal %></span>&nbsp;&nbsp;
+											<span class="text-danger ">USD</span>
+										</h3>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="ibox float-e-margins">
+									<div class="ibox-title">
+										<h5 class="tranfhi">Transfer History</h5>
+										<div class="ibox-tools">
+										</div>
+									</div>
+									<div class="ibox-content">
+										<p class="text-danger m-t m-b tranText">Once you make a payment, you will need to wait for the transaction to be processed. It will take 10-20 minutes. Once your payment is completed, you will receive a payment notification. In case you have not made the complete payment, you will receive a notice of pending payment. If you have made the full payment, you will receive an email notification and thereafter your tokens will be credited into your account.</p>
+										<table class="table">
+											<thead>
+												<tr>
+													<th class="col-md-1 text-center snl">S.No</th>
+													<th class="col-md-2 text-center dal">Date</th>
+													<th class="col-md-1 text-center inol">IN/OUT</th>
+													<th class="col-md-2 text-center frol">From</th>
+													<th class="col-md-2 text-center tol">To</th>
+													<th class="col-md-2 text-center txhl">Tx Hash</th>
+													<th class="col-md-2 text-center vall">Value</th>
+												</tr>
+											</thead>
+											<tbody id="displaydata">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+						<% include ../partials/footer %>
+			</div>
+		</div>
+		<% include ../partials/profile %>
+</body>
+<% include ../partials/script %>
+<script src="/lib/js/sha256.min.js"></script>
+	<script src="/js/transactions.js"></script>
+	<script type="text/javascript">
+		$(function () {
+      		$('#side-menu li:nth-child(4)').addClass('active');
+			$('.i-checks').iCheck({
+				checkboxClass: 'icheckbox_square-green',
+				radioClass: 'iradio_square-green',
+			});
+		});
+		toastr.options = { timeOut: 0, extendedTimeOut: 0 };
+		toastr.info('Please wait while we fetch your transaction history from the blockchain');
+		var isFirst = true;
+		var socket = io('https://', {secure: true});
+		  socket.on('transfer', function (result) {
+			if(result.data.args.to == '<%= etherAddress %>' && isFirst) {
+			  toastr.clear();
+			  toastr.options = {};
+			  toastr.success(`You have been credited with ${parseFloat(result.data.args.value)/10000} tokens.`);
+			  isFirst = false;
+			  setTimeout(function() {
+				location.reload();
+			  }, 3000);
+			}
+		});
+	</script>
+
+</html>

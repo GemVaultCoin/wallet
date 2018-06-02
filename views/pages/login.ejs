@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <% include ../partials/head %>
+  <link href="/css/intlTelInput.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="wrapper">
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div class="ibox float-e-margins">
+        <div class="ibox-title">
+        <img src="/img/logo.png" class="logoImg"/>
+          <h2 class="font-bold sgi">Sign In</h2>
+          <div id="trans" class="localizationTool" style="margin-top:-5%;"></div>
+        </div>
+        <div class="ibox-content">
+          <div class="row">
+            <div class="col-sm-6 b-r">
+              <p class="sinfm">Sign In Now For More Experience.</p>
+              <form role="form" method="POST" id='userLoginForm' name='userLoginForm' >
+                <div class="form-group">
+                  <div class="input-group date">
+                    <input type="email" class="form-control" id="login_email" placeholder="Enter Registered Mail ID" required>
+                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="input-group date">
+                    <input type="password" class="form-control" id="login_password" placeholder="Enter Password" required>
+                    <span class="input-group-addon"><i style="font-size:18px; padding-left:1px; padding-right:1px;" class="fa fa-lock"></i></span>
+                  </div>
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-primary pull-center m-t-n-xs" type="submit"><strong class="lgi">Login</strong></button>
+                </div>
+              </form>
+            </div>
+            <div class="col-sm-6">
+              <h4 class="notam">Not a Member?</h4>
+              <p class="ycca">You Can Create An Account:</p>
+              <p class="text-center">
+                <a><span data-toggle="modal" data-target="#signUpModal"><i class="fa fa-sign-in mediumicon"></i></span></a>
+              </p>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 15px;">
+            <button class="btn btn-sm btn-primary pull-middle m-t-n-xs" data-toggle="modal" data-target="#passwordRecoveryModal" type="submit"><strong class="fyp">Forgot Your Password?</strong></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Forgot Password Modal -->
+    <div class="modal fade" id="passwordRecoveryModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h3 class="modal-title forp">Forgot Password?</h3>
+            </div>
+            <div class="modal-body">
+              <p class="text-center forptext">Enter your registered mail ID. We will send a password recovery Email to the mail ID. Please follow the instructions to reset the password</p>
+              <form id='passwordRecoveryForm' name='passwordRecoveryForm'>
+                <div class="form-group m-t">
+                  <label class="ere">Enter Registered Email</label>
+                  <input type="email" placeholder="E-mail" id='fp_email' name='email' class="form-control" autocomplete="off">
+                </div>
+                <div class="text-center">
+                  <a class="btn btn-sm btn-primary m-t" href="javascript:resetPassword();"><strong class="grl">Get Recovery Link</strong></a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+        <div class="modal fade" id="resendVefiModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h3 class="modal-title Res_ver_text">Resend Verification Link?</h3>
+            </div>
+            <div class="modal-body">
+              <p class="text-center forp_Res_ver_text">Enter your registered Email, We will send a activation link again.</p>
+              <form id='resendVefiModalForm' name='resendVefiModalForm'>
+                <div class="form-group m-t">
+                  <label class="ere">Enter Registered Email</label>
+                  <input type="email" placeholder="E-mail" id='rs_email' name='email' class="form-control" autocomplete="off">
+                </div>
+                <div class="text-center">
+                  <a class="btn btn-sm btn-primary m-t" href="javascript:resednActivation();"><strong class="subm">Submit</strong></a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+    <!-- Sign Up Modal -->
+    <div class="modal fade" id="signUpModal" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 class="modal-title sigu">Sign Up</h3>
+          </div>
+          <div class="modal-body">
+            <form method="POST" id='userSignuptForm' name='userSignuptForm'>
+              <div class="form-group">
+                <label class="nam">Name</label>
+                <input type="text" placeholder="Name" id='reg_name' name='name' class="form-control"  autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label class="emai">Email</label>
+                <input type="email" placeholder="E-mail" id='reg_email' name='email' class="form-control" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label class="passw">Password</label>
+                <input type="password" placeholder="Enter Password" id='reg_password' name='password' class="form-control"  autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label class="conpa">Confirm Password</label>
+                <input type="password" placeholder="Re-Enter Password" id='reg_password_confirm' name='confirmedPassword' class="form-control"  autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label class="phon">Phone Number</label><br/>
+                    <input type="Number" id="mobileNumberSignup" class="form-control m-input" placeholder="Mobile No.">
+                     <small class="text-danger float-right" id="mobileNumberSignupe"></small>
+              </div><br><br>
+              <div class="form-group">
+                <label> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" id="reg_tnc" class="i-checks" style="position: absolute; opacity: 0;" ><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>&nbsp;&nbsp;&nbsp;<span class="iat">I Accept The</span> <a href="" target="_blank"><span class="tac">Terms & Conditions</span></a></label>
+              </div><br>
+              <button class="btn btn-sm btn-primary m-t-n-xs lod-btn" type="submit"><strong class="subm">Submit</strong></button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class="footer foot-2" style="text-align:center">
+      <div class="row">
+        <div class="col-md-12">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+
+        </div>
+      </div>
+  </div>
+</body>
+<script src="/js/login.js"></script>
+<% include ../partials/script %>
+<script src="/lib/js/sha256.min.js"></script>
+<script src="/js/reset.js"></script>
+<script src="/js/intlTelInput.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+      });
+    });
+    signUp();
+    loginUser();
+  </script>
+   <script>
+      $("#mobileNumberSignup").intlTelInput({
+        initialCountry: "auto",
+          geoIpLookup: function(callback) {
+            $.get('https://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+              var countryCode = (resp && resp.country) ? resp.country : "";
+              callback(countryCode);
+            });
+          }
+      });
+   </script>
+</html>

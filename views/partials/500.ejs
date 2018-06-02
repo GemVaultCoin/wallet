@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <% include head %>
+  </head>
+  <body class="gray-bg">
+    <div id="wrapper">
+      <div id="trans" class="localizationTool" style="display:none;"></div>
+      <div class="middle-box text-center animated fadeInDown">
+          <h1><%= title %></h1>
+          <h3 class="font-bold InseE">Internal Server Error</h3>
+
+          <div class="error-desc">
+              <%= error %>
+              <span class="ThSEn">The server encountered something unexpected that didn't allow it to complete the request. We apologize.</span><br>
+              <span class="ycGb">You can go back to main page: </span><br><a href="/" class="btn btn-primary m-t"><span class="cliH">Click Here</span></a>
+          </div>
+      </div>
+    </div>
+  </body>
+<html>
+<% include script %>
