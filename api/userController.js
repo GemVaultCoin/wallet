@@ -1,40 +1,43 @@
-var DB 					=	require('../db');
+var userModel =	require('../models/User');
 var crypto 				=	require('crypto');
 var nodemailer 			=	require('nodemailer');
 var randomstring 		=	require('randomstring');
 var getLanguageMessage 	=	require('./getLanguageMessage');
 var ejs 				=	require("ejs");
-var ABI 				= require('../contracts/CrowdSaleABI.json');
-var web3  				=	require('../web3');
+//var ABI 				= require('../contracts/CrowdSaleABI.json');
+var web3  				=	require('../webrpc');
 
-var Record 				=	web3.eth.contract(ABI).at(process.env.COINCROWDSALE);
+//var Record = web3.eth.contract(ABI).at(process.env.COINCROWDSALE);
+var sparkPostTransport = require('nodemailer-sparkpost-transport');
 
-var transporter = nodemailer.createTransport({
-	service: 'Gmail',
-		auth: {
-			user: 'tt085045@gmail.com',
-			pass: 'testing@!@#$%'
-		}
-	});
+var transporter = nodemailer.createTransport(
+		sparkPostTransport({sparkPostApiKey: process.env.SPARKPOST_API_KEY}));
+
+var l = require('../logs')
 
 module.exports = {
 	getUserDetails:(req,res,next)=>{
 		var lang = req.query.localStorage == "zh_CN" ? getLanguageMessage.ch : getLanguageMessage.en
 		req.session.etherBal = web3.fromWei(web3.eth.getBalance(req.session.currentUserKey),"ether");
+		req.session.tokenBal = 0;
+		res.send({success: true, currentUserName:req.session.currentUserName, currentUserKey:req.session.currentUserKey, currentEtherBalance: req.session.etherBal, currentTokenBalance: parseFloat(req.session.tokenBal/10000), currentUserEmail: req.session.currentUserEmail});
+
+		/*
 		Record.balanceOf(req.session.currentUserKey, (err,result) => {
 			if(err){
 				return res.status(500).send({success:false, status:lang.terro})
 			}
 			req.session.tokenBal = result;
-			res.send({success: true, currentUserName:req.session.currentUserName, currentUserKey:req.session.currentUserKey, currentEtherBalance: req.session.etherBal, currentTokenBalance: parseFloat(req.session.tokenBal/10000), currentUserEmail: req.session.currentUserEmail});
-		});
+					});
+		*/
+
 	},
 	editUserProfile:(req, res, next)=>{
 		var type = req.body.type;
 		var lang = req.body.localStorage == "zh_CN" ? getLanguageMessage.ch : getLanguageMessage.en
 		if(type == 'Name' && req.body.newValue){
 			var newName = req.body.newValue;
-			DB.FinalUserDB.findOne({name:req.session.currentUserName})
+			userModel.findOne({name:req.session.currentUserName})
 			.then((response) => {
 				response.name = newName;
 				response.save()
@@ -48,9 +51,9 @@ module.exports = {
 			.catch((err) => {
 				res.send({success: false, status:lang.serisunatopr})
 			});
-		}else if(type == 'Password'){
+		} else if(type == 'Password'){
 			var newPassword = req.body.newValue;
-			DB.FinalUserDB.findOne({email: req.session.currentUserEmail})
+			userModel.findOne({email: req.session.currentUserEmail})
 			.then((response) => {
 				var servsalt = response.serversalt;
 				var finalpass = crypto.createHash('sha256').update(newPassword+servsalt).digest("hex");
@@ -78,7 +81,7 @@ module.exports = {
 		var email = req.body.email;
 		var lang = req.body.localStorage == "zh_CN" ? getLanguageMessage.ch : getLanguageMessage.en
 
-		DB.FinalUserDB.findOne({email:email})
+		userModel.findOne({email:email})
 		.then((user) => {
 			if(!user){
 				res.send({success:false, status: lang.useNoPenReg});
@@ -172,17 +175,17 @@ module.exports = {
 		})
 	},
 	verifyAccountByEmail:(req,res,next)=>{
-		if(!req.params.token){
+		if (!req.params.token) {
 			res.render('./pages/common', { title: 'Error!', heading: 'Technical Error Occoured!', message: 'We are unable to verify the account due to some technical issues. Please try again.', linkHref: '/', linkText: 'Click Here To Login' });
-		}else{
-			DB.FinalUserDB.findOne({ activationToken: req.params.token })
+		} else {
+			userModel.findOne({ emailerToken: req.params.token })
 			.then((response) => {
-				if (new Date(response.activationLinkExpires).getTime() < Date.now()) {
-					res.render('./pages/common', { title: 'Link Expired!', heading: 'Sorry Your Activation Link is Expired!', message: 'Your activation link is expired. Click below to resend the activation link', linkHref: `https://resend/${response.activationToken}`, linkText: 'Resend Activation Mail' });
-				}else {
-					response.activated = true;
-					response.activationToken = undefined;
-					response.activationLinkExpires = undefined;
+				if (new Date(response.linkExpires).getTime() < Date.now()) {
+					res.render('./pages/common', { title: 'Link Expired!', heading: 'Sorry Your Activation Link is Expired!', message: 'Your activation link is expired. Click below to resend the activation link', linkHref: `https://resend/${response.emailerToken}`, linkText: 'Resend Activation Mail' });
+				} else {
+					response.status = true;
+					response.linkExpires = null;
+					response.emailerToken = null;
 					response.save().then((result) => {
 						if (result) {
 							res.render('./pages/common', { title: 'GemBank Wallet', heading: 'Activation Successfull!', message: 'Your account is successfully activated. Please log in to continue.', linkHref: '/', linkText: 'Click Here To Login' });
@@ -190,7 +193,8 @@ module.exports = {
 					});
 				}
 			}).catch((err) => {
-				res.render('./pages/common', { title: 'Error!', heading: 'Technical Error Occoured!', message: 'We are unable to verify the account due to some technical issues. Please try again.', linkHref: '/', linkText: 'Click Here To Login' });
+				l.runtime("Error verifying email", err, {rt:"e"})
+				res.render('./pages/common', { title: 'Error!', heading: 'Technical Error Occured!', message: 'We are unable to verify the account due to some technical issues. Please try again.', linkHref: '/', linkText: 'Click Here To Login' });
 			})
 		}
 	},

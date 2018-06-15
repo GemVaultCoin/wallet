@@ -1,0 +1,8 @@
+module.exports = {
+  CoreToken: '0x238881fe1142af9738a37971afcc5937434a0cae',
+  Collector: '0x30ea41b79b4dc07000776e33e7326e3f8a524c09',
+  Issuer: '0x0d978178ac23ed5ff593b94d70e3ee7a8e5515f9',
+  Cashier: '0xa57392548087453dec6106e670bbfb849276b358',
+  Trader: '0x3a1116594eecf36d8811469eb97a2b2ccb7cfd97',
+  Owner: '0x6e617119909b5a03dc381c16eb68846F6cB458C1'
+}

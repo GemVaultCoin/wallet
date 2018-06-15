@@ -89,14 +89,16 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-var web3 = require('../web3');
-var ABI = require('../contracts/CrowdSaleABI.json');
-var Record =  web3.eth.contract(ABI).at(process.env.COINCROWDSALE);
+var web3 = require('../webrpc');
+//var ABI = require('../contracts/CrowdSaleABI.json');
+//var Record =  web3.eth.contract(ABI).at(process.env.COINCROWDSALE);
 
 io.on('connection', function (socket) {
+  /*
   var TEvent = Record.Transfer(
 	(err,result) => {
     if(err) return err;
     socket.emit('transfer', {data:result});
 	});
+  */
 });

@@ -1,16 +1,21 @@
 var axios 	=	require('axios');
 var crypto	=	require('crypto');
-var web3  	=	require('../web3');
+var web3  	=	require('../webrpc');
 var DB    	=	require('../db');
-var ABI   	=	require('../contracts/CrowdSaleABI.json');
-var Record	=	web3.eth.contract(ABI).at(process.env.COINCROWDSALE);
+//var ABI   	=	require('../contracts/CrowdSaleABI.json');
+//var Record	=	web3.eth.contract(ABI).at(process.env.COINCROWDSALE);
 var qrcode	=	require('qrcode');
 var coinpayments = require('coinpayments');
-var client  = new coinpayments({'key':process.env.COINPAYMENTAPIKEY,'secret':process.env.COINPAYMENTSECRET,'autoIpn':false});
+//var client  = new coinpayments({'key':process.env.COINPAYMENTAPIKEY,'secret':process.env.COINPAYMENTSECRET,'autoIpn':false});
 var getLanguageMessage 	=	require('./getLanguageMessage');
 
 module.exports = {
-	buyToken:(req, res, next)=>{
+
+	buyToken:(req, res, next)	=>	{
+
+		res.send({status:true, isCoinPayment: true, status:'Transaction Created', result: result, currency: req.body.currency})
+
+		/*
 		var paymentMode = req.body.currency;
 		var amountToken = req.body.amount;
 		var terms 		= req.body.terms;
@@ -45,12 +50,17 @@ module.exports = {
 		}else{
 			res.send({status:false, message: "Please enter valid details"});
 		}
+		*/
 	},
-	creditToken:(req, res, next)=>{
+
+	creditToken:(req, res, next)	=>	{
+
 		if(req.headers['user-agent'] !='CoinPayments.net IPN Generator'){
 			console.log('==>Unauthorized use or access!.',req.headers['user-agent'])
 			return res.status(401).send('==>Unauthorized use or access!.');
+
 		}
+		/*
 		if(req.body.status == '100' && req.body.merchant == process.env.COINPAYMENTMERCHANTID){
 			DB.TransactionDB.findOne({publickey: req.body.custom, txid: req.body.txn_id,status:"100"})
 			.then((response) => {
@@ -110,8 +120,11 @@ module.exports = {
 		{
 			res.status(201).send();
 		}
+		*/
 	},
 	getTokenDetails:(req, res, next) => {
+		res.status(200).send({ status:true, tokenBal: 0, tokenHolders: 0, walletUsers: 0});
+		/*
 		DB.FinalUserDB.find()
 		.then((data) => {
 			if(data){
@@ -129,8 +142,11 @@ module.exports = {
 		}).catch((err) => {
 			res.status(200).send({ status:true, tokenBal: 0, tokenHolders: 0, walletUsers: 0});
 		});
+		*/
 	},
-	sendCurrency:(req, res, next)=>{
+	sendCurrency:(req, res, next)	=>	{
+			res.send({status:false, message:lang.InsuFuTo})
+			/*
 	    var currencyType = req.body.currencyType;
 	    var amount = req.body.amount;
 	    var toAddr = req.body.receiverAddress;
@@ -177,8 +193,11 @@ module.exports = {
 	    }else {
 	        res.send({ status:false, message:lang.InvEthAdd})
 	    }
+			*/
 	},
-	getTokenTransaction:(req, res, next)=>{
+	getTokenTransaction:(req, res, next)	=>	{
+			res.send({ status:false, message:lang.unatoret});
+			/*
 	    var lang = req.query.localStorage == "zh_CN" ? getLanguageMessage.ch : getLanguageMessage.en
 	    var FromEvent = Record.Transfer({_from: req.session.currentUserKey}, { fromBlock: process.env.FROMBLOCK, toBlock: 'latest' });
 	    FromEvent.get((error, fromresult) => {
@@ -201,8 +220,12 @@ module.exports = {
 	            res.send({ status:false, message:lang.unatoret});
 	        }
 	    });
+			*/
 	},
-	backupPrivateKey:(req,res,next)=>{
+
+	backupPrivateKey:(req,res,next)	=> {
+		res.send({status:false, message:lang.terro})
+			/*
 	    var lang = req.body.localStorage == "zh_CN" ? getLanguageMessage.ch : getLanguageMessage.en
 
 	    DB.FinalUserDB.findOne({ email: req.body.email, publickey: req.session.currentUserKey })
@@ -245,8 +268,9 @@ module.exports = {
 	    .catch((err)=>{
 	        res.send({status:false, message:lang.terro});
 	    });
+			*/
 	},
-	decrypt:(text)=>{
+	decrypt:(text)	=>	{
 		var decipher = crypto.createDecipher(process.env.ALGORITHM,process.env.ENCRYPTPASS);
 		var dec = decipher.update(text,'hex','utf8')
 		dec += decipher.final('utf8');
