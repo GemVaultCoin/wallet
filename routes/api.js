@@ -11,7 +11,6 @@ router.post('/userlogin',AuthController.userLogin);
 router.post('/ipnhandler',TokenController.creditToken);
 router.post('/usersignup',AuthController.userSignUp);
 router.post('/buytoken',authenticate, TokenController.buyToken);
-router.post('/getclientsalt',AuthController.getClientSalt);
 router.post('/sendcurrency',authenticate, TokenController.sendCurrency);
 router.post('/backupwallet',authenticate, TokenController.backupPrivateKey);
 router.get('/gettokentrans',authenticate, TokenController.getTokenTransaction);
