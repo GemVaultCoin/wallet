@@ -36,12 +36,9 @@ function signUp() {
 		if (name && email && password && confpassword && code && phoneno && terms) {
 			if (password == confpassword) {
 				toastr.info(LANG.SignPW);
-				var salt = GenerateSalt(32);
-				var hashedPass = generateHash(password, salt);
-				var hashedConfPass = generateHash(confpassword, salt);
 				$('.subm').html('<i class="fa fa-spinner fa-spin"></i>')
 				$('.lod-btn').attr("disabled", true);
-				axios.post('/api/usersignup', { name: name, email: email, pass: hashedPass, confPass: hashedConfPass, code: code, phoneNo: phoneno, psalt: salt, active: false,localStorage:localStorage.getItem("userLanguage")})
+				axios.post('/api/usersignup', { name: name, email: email, pass: password, confPass: confpassword, code: code, phoneNo: phoneno, active: false,localStorage:localStorage.getItem("userLanguage")})
 					.then((response) => {
 						if (response.data.status) {
 							toastr.clear();
@@ -52,6 +49,7 @@ function signUp() {
 							toastr.error(`${response.data.message}`);
 						}
 					}).catch((err) => {
+						console.log(err)
 						toastr.clear();
 						toastr.error(LANG.ServerEnErr);
 					});
@@ -74,41 +72,22 @@ function loginUser()
 		var pass = document.getElementById("login_password").value;
 
 		var LANG = localStorage.getItem("userLanguage") == "zh_CN" ? lang.ch :lang.en;
-		if(email && pass){
-			axios.post('/api/getclientsalt', { email: email,localStorage:localStorage.getItem("userLanguage")})
-			.then((response) => {
-				if (response.data.status) {
-					var hashp = generateHash(pass, response.data.salt);
+		if (email && pass) {
+
 					axios.post('/api/userlogin', {
 						username: email,
-						password: hashp,
+						password: pass,
 						localStorage:localStorage.getItem("userLanguage"),
 					}).then((respon) => {
 						if (respon.data.status) {
 							sessionStorage.setItem('isLogged',respon.data.isLogged);
 							location.replace('/dashboard');
-						}else {
+						} else {
 							toastr.error(`${respon.data.message}`);
 						}
 					});
-				}else if(!response.data.userStatus){
-					toastr.error(`${response.data.message}`,LANG.PleWai,{
-			            timeOut             : 1000,
-			            extendedTimeOut     : 100,
-			            closeButton         : true,
-			            progressBar         : true,
-			            tapToDismiss        : true,
-			            onHidden: function() {
-			            	$('#resendVefiModal').modal('toggle');
-			            }
-			        });
-				}else {
-					toastr.error(`${response.data.message}`);
-				}
-			}).catch((err) => {
-				toastr.error(LANG.ServerEnErr);
-			});
-		}else{
+
+		} else {
 			toastr.error(LANG.Allfr);
 		}
 	});
