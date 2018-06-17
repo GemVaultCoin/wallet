@@ -7,11 +7,16 @@ function buyToken(choice)
 	{
 		if(currency && amount && terms && amount>0)
 		{
+
+
+
+
+
 			if(currency == 'ETH')
 			{
 				var localS = localStorage.getItem("userLanguage");
 				axios.all([
-				axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD'),
+				axios.get('/api/getTokenRate'),
 				axios.get('/api/getuserdetails?localStorage='+localS)])
 				.then(axios.spread(function (etherPrice, userDetails) {
 					totalCost = parseFloat(amount/etherPrice.data.USD).toPrecision(8);
