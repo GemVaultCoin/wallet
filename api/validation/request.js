@@ -37,16 +37,16 @@ async function validate(req, res) {
   vo.lang = lang
 
   //checking user
-  if (!req.currentUser || req.currentUser=='' || req.currentUser==null) {
-   l.runtime("Validation error on getting user", req.currentUser, {rt:"t"})
+  if (!req.session.currentUserEmail || req.session.currentUserEmail =='' || req.session.currentUserEmail==null) {
+   l.runtime("Validation error on getting user", req.session.currentUserEmail, {rt:"t"})
    return res.send({ status: false, message:lang.buyTUauthAce});
   }
 
   //fetching user
-  var user = await usrModel.findOne({_id: req.currentUser._id}).exec()
+  var user = await usrModel.findOne({email: req.session.currentUserEmail}).exec()
 
   if (!user) {
-    l.runtime("Validation error on getting user [not found]", req.currentUser, {rt:"t"})
+    l.runtime("Validation error on getting user [not found]", req.session.currentUserEmail, {rt:"t"})
     return res.send({ status: false, message:lang.buyTUauthAceUsNotFo});
   }
 
@@ -180,7 +180,7 @@ async function validate_signin(req, res)	{
 
 	vo.pk = pk
   vo.valid = true
-	
+
   l.runtime("Tracing request validation", vo, {rt:"t"})
 
   return vo
