@@ -22,4 +22,5 @@ router.get('/gettokensale', authenticate, TokenController.getTokenDetails);
 router.get('/activate/:token',UserController.verifyAccountByEmail)
 router.get('/recovery/:token',UserController.forgotPasswordIndex)
 router.post('/getEmailActivationLink',UserController.getEmailActivationLink)
+router.post('/getTokenRate',TokenController.getTokenRate);
 module.exports = router;
