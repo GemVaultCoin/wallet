@@ -10,7 +10,12 @@ function Erc20() {
       gasLimit: web3.utils.toHex(cfg.GasLimit)
     }
 
-    return new web3.eth.Contract(abiToken.abi, this._opts.address, this._opts)
+    this._ct = web3.eth.Contract(abiToken.abi, this._opts.address, this._opts)
+    return this._ct
+}
+
+Erc20Trader.prototype.getDecimals = async function()  {
+  
 
 }
 

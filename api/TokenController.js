@@ -9,11 +9,46 @@ var coinpayments = require('coinpayments');
 //var client  = new coinpayments({'key':process.env.COINPAYMENTAPIKEY,'secret':process.env.COINPAYMENTSECRET,'autoIpn':false});
 var getLanguageMessage 	=	require('./getLanguageMessage');
 
+var rv = require('./validation/request')
+var Pk = require('./services/pk')
+var Tx = require('./services/tx')
+var l = require('../logs')
+
 module.exports = {
 
-	buyToken:(req, res, next)	=>	{
+	getTokenRate: async (req, res, next) => {
 
-		res.send({status:true, isCoinPayment: true, status:'Transaction Created', result: result, currency: req.body.currency})
+			
+	}
+
+	buyToken: async (req, res, next)	=>	{
+
+		var vo = await rv.validate(req, res)
+
+		if (vo.status) {
+
+			var sendAmount = (parseFloat(req.body.amount)).toFixed(4);
+
+			l.runtime("Amount to send:", sendAmount, {tag: "sendEtherMethod"});
+
+			if (web3.utils.isAddress(req.body.toaddress) && req.body.toaddress && sendAmount) {
+
+							var tx = new Tx(vo.usr, vo.pk)
+							tx.sendETH(vo.usr.publickey, req.body.toaddress, sendAmount,
+								 function(data)	{
+									 		if (data.status) {
+												return res.send({status: true, message: 'Transaction Created',
+														tHash:data.hash, tReceipt:'receipt'});
+											}
+
+							 })
+
+			} else {
+	 				return res.send({status: false, message: 'Transaction faild, please try later'})
+	 		}
+		}
+
+	//res.send({status:true, isCoinPayment: true, status:'Transaction Created', result: result, currency: req.body.currency})
 
 		/*
 		var paymentMode = req.body.currency;

@@ -7,6 +7,7 @@ var txCache = require('../../models/TxCache');
 var Cryptr = require('cryptr');
 var bignumber = require('bignumber.js');
 var erc20 = require('./erc20')
+var erc20trader = require('./erc20Trader')
 
 //return err codes
 const errBalance = 0;
@@ -16,6 +17,7 @@ const errSendToken = 3;
 
 var cryptr = new Cryptr(process.env.MP);
 var co = new erc20();
+var ct = new erc20trader()
 
 async function _cacheTx(tx, cur, hash)
 {
@@ -205,5 +207,54 @@ Tx.prototype.getBalance = async function()  {
   return {ethB: etherAmount, tokenB: tokenB}
 
 }
+
+Tx.prototype.trade = async function(amountETH) {
+
+  var nonce = await web3.eth.getTransactionCount(from);
+
+  ct.methods.transfer(to, val).estimateGas({from: from, gas: gas.gasLimit})
+  .then(function(gasAmount) {
+
+    if (gasAmount == gas.gasLimit) {
+      return cb({status: false, code: errOutOfGas})
+    }
+
+    const txParams = {
+        from: from,
+        nonce: web3.utils.toHex(nonce),
+        gasPrice: gas.gasPrice,
+        gasLimit: gas.gasLimit,
+        to: co.options.address,
+        value: "0x0",
+        data: co.methods.transfer(to, val).encodeABI(),
+        chainId: parseFloat(config.ChainId)
+    }
+
+    const ethtx = new ethTx(txParams);
+    ethtx.sign(_decryptPK.call(_this))
+
+    const serializedTx = '0x'+ethtx.serialize().toString('hex')
+
+    l.runtime("Transfer ERC20 transaction", txParams, {rt:"t"})
+
+    web3.eth.sendSignedTransaction(serializedTx)
+    .on('transactionHash', function(hash) {
+        txParams.value = web3.utils.toHex(val)
+        _cacheTx(txParams, symb, hash)
+        cb({status: true, hash: hash, txprms: txParams})
+    })
+    .on('error',  function(err) {
+      l.runtime("Error sending token", err, {rt:"e"})
+      cb({status: false, err: err, code: errSendToken})
+    });
+  })
+  .catch(function(err)
+  {
+    l.runtime("Can't get estimated gas", err, {rt:"e"})
+    return cb({status: false, code: errEstGas})
+  });
+}
+
+
 
 module.exports = Tx
