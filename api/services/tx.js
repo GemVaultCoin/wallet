@@ -6,18 +6,21 @@ var l = require('../../logs');
 var txCache = require('../../models/TxCache');
 var Cryptr = require('cryptr');
 var bignumber = require('bignumber.js');
-var erc20 = require('./erc20')
-var erc20trader = require('./erc20Trader')
+var erc20 = require('./erc20');
+var erc20trader = require('./erc20Trader');
 
 //return err codes
 const errBalance = 0;
 const errEstGas = 1;
 const errOutOfGas = 2;
 const errSendToken = 3;
+const errFromAddr = 4;
+const errToAddr = 5;
+const errAmount = 6;
 
 var cryptr = new Cryptr(process.env.MP);
 var co = new erc20();
-var ct = new erc20trader()
+var ct = new erc20trader();
 
 async function _cacheTx(tx, cur, hash)
 {
@@ -78,7 +81,9 @@ async function _balanceEnough(from, gas, weiAmount)
 }
 
 async function _getGas() {
-  var gasPrice = web3.utils.toHex(await web3.eth.getGasPrice());
+  const gp = await web3.eth.getGasPrice()
+  l.runtime("Network gas price estimation:", gp, {rt:"t"})
+  var gasPrice = web3.utils.toHex(gp*3);
   var gasLimit = web3.utils.toHex(config.GasLimit);
   return {gasPrice: gasPrice, gasLimit: gasLimit}
 }
@@ -99,6 +104,18 @@ function Tx(usr, pk)  {
 }
 
 Tx.prototype.sendETH = async function(from, to, amountETH, cb) {
+
+  if (!web3.utils.isAddress(from))  {
+    return cb({status: false, code: errFromAddr})
+  }
+
+  if (!web3.utils.isAddress(to))  {
+    return cb({status: false, code: errToAddr})
+  }
+
+  if (!amountETH || amountETH <= 0)  {
+    return cb({status: false, code: errAmount})
+  }
 
   const gas = await _getGas()
 
@@ -137,6 +154,18 @@ Tx.prototype.sendETH = async function(from, to, amountETH, cb) {
 }
 
 Tx.prototype.transferERC20 = async function(from, to, amountERC20, cb) {
+
+    if (!web3.utils.isAddress(from))  {
+      return cb({status: false, code: errFromAddr})
+    }
+
+    if (!web3.utils.isAddress(to))  {
+      return cb({status: false, code: errToAddr})
+    }
+
+    if (!amountERC20 || amountERC20 <= 0)  {
+      return cb({status: false, code: amountERC20})
+    }
 
     const gas = await _getGas()
     const decs = await co.methods.decimals().call({from: from})
@@ -208,51 +237,31 @@ Tx.prototype.getBalance = async function()  {
 
 }
 
-Tx.prototype.trade = async function(amountETH) {
+Tx.prototype.getCacheTxs = async function(cb) {
 
-  var nonce = await web3.eth.getTransactionCount(from);
+  const decs = await co.methods.decimals().call()
 
-  ct.methods.transfer(to, val).estimateGas({from: from, gas: gas.gasLimit})
-  .then(function(gasAmount) {
+  txCache.find({$or:[{from: this._usr.publickey}, {to: this._usr.publickey}]}).sort({"updated_at":-1})
+    .then((trs) => {
 
-    if (gasAmount == gas.gasLimit) {
-      return cb({status: false, code: errOutOfGas})
-    }
+        for (var i=0; i<trs.length; i++)
+        {
+            if (trs[i].currency == 'ETH') {
+              trs[i].amount = web3.utils.fromWei(trs[i].amount, 'ether')
+            } else {
+              trs[i].amount = trs[i].amount/(Math.pow(10, decs)).toFixed(decs)
+            }
+        }
 
-    const txParams = {
-        from: from,
-        nonce: web3.utils.toHex(nonce),
-        gasPrice: gas.gasPrice,
-        gasLimit: gas.gasLimit,
-        to: co.options.address,
-        value: "0x0",
-        data: co.methods.transfer(to, val).encodeABI(),
-        chainId: parseFloat(config.ChainId)
-    }
+        if (trs) {
+          return cb({status: true, data: trs});
+        }
 
-    const ethtx = new ethTx(txParams);
-    ethtx.sign(_decryptPK.call(_this))
-
-    const serializedTx = '0x'+ethtx.serialize().toString('hex')
-
-    l.runtime("Transfer ERC20 transaction", txParams, {rt:"t"})
-
-    web3.eth.sendSignedTransaction(serializedTx)
-    .on('transactionHash', function(hash) {
-        txParams.value = web3.utils.toHex(val)
-        _cacheTx(txParams, symb, hash)
-        cb({status: true, hash: hash, txprms: txParams})
-    })
-    .on('error',  function(err) {
-      l.runtime("Error sending token", err, {rt:"e"})
-      cb({status: false, err: err, code: errSendToken})
+    }).catch((err)=>{
+        l.runtime(err.message, {err: err}, {rt: 'e'})
+        return cb({status: false, err: err});
     });
-  })
-  .catch(function(err)
-  {
-    l.runtime("Can't get estimated gas", err, {rt:"e"})
-    return cb({status: false, code: errEstGas})
-  });
+
 }
 
 
