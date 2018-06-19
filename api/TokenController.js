@@ -13,152 +13,50 @@ var rv = require('./validation/request')
 var Pk = require('./services/pk')
 var Tx = require('./services/tx')
 var l = require('../logs')
+var erc20Trader = require('./services/erc20Trader')
+var erc20 = require('./services/erc20')
+var trader = new erc20Trader()
+var token = new erc20()
 
 module.exports = {
 
 	getTokenRate: async (req, res, next) => {
-
-			
-	}
+			const rawRate = await trader.methods.rate().call()
+			const decimals = await token.methods.decimals().call()
+			return res.send({status: true, eth2token: rawRate, decimals: decimals})
+	},
 
 	buyToken: async (req, res, next)	=>	{
 
 		var vo = await rv.validate(req, res)
 
-		if (vo.status) {
+		if (vo.valid) {
 
 			var sendAmount = (parseFloat(req.body.amount)).toFixed(4);
 
-			l.runtime("Amount to send:", sendAmount, {tag: "sendEtherMethod"});
+			l.runtime("Amount to send:", sendAmount, {tag: "buyToken"});
 
-			if (web3.utils.isAddress(req.body.toaddress) && req.body.toaddress && sendAmount) {
+			if (sendAmount) {
 
 							var tx = new Tx(vo.usr, vo.pk)
-							tx.sendETH(vo.usr.publickey, req.body.toaddress, sendAmount,
+							tx.sendETH(vo.usr.publickey, trader.options.address, sendAmount,
 								 function(data)	{
 									 		if (data.status) {
 												return res.send({status: true, message: 'Transaction Created',
-														tHash:data.hash, tReceipt:'receipt'});
+														tHash:data.hash, tReceipt:'receipt', addr: trader.options.address});
 											}
 
 							 })
 
 			} else {
-	 				return res.send({status: false, message: 'Transaction faild, please try later'})
+	 				return res.send({status: false, message: 'Transaction failed, please try later'})
 	 		}
 		}
-
-	//res.send({status:true, isCoinPayment: true, status:'Transaction Created', result: result, currency: req.body.currency})
-
-		/*
-		var paymentMode = req.body.currency;
-		var amountToken = req.body.amount;
-		var terms 		= req.body.terms;
-		if(paymentMode && amountToken && terms && amountToken > 0){
-			axios.post('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
-			.then((value) => {
-				var totalCostInEther = (amountToken / value.data.USD).toPrecision(8);
-				client.createTransaction({
-					'currency1' : 'USD',
-					'currency2' : req.body.currency,
-					'amount' : req.body.amount,
-					'buyer_email': req.session.currentUserEmail,
-					'custom': req.session.currentUserKey,
-					'item_name': 'GEM',
-					'item_number': req.body.amount
-					},function(err, result){
-					if(result){
-						var crypto = (req.body.currency == 'ETH')?'ethereum':'bitcoin';
-						var amount = parseFloat((parseFloat(result.amount) + 0.000001).toFixed(6));
-						result.amount = amount;
-						qrcode.toDataURL(`${crypto}:${result.address}?amount=${amount}`, {version: 6, errorCorrectionLevel:'M'},(err, qrImage) => {
-								result.qrcode_url = qrImage;
-								res.send({status:true, isCoinPayment: true, status:'Transaction Created', result: result, currency: req.body.currency});
-						});
-					}else{
-						res.send({status:false, message:'Transaction faild try after some time'});
-					}
-				});
-			}).catch((err) => {
-				res.send({status:false, message:'We are unable to process your request at this time. Please try again later!'})
-			});
-		}else{
-			res.send({status:false, message: "Please enter valid details"});
-		}
-		*/
 	},
 
-	creditToken:(req, res, next)	=>	{
-
-		if(req.headers['user-agent'] !='CoinPayments.net IPN Generator'){
-			console.log('==>Unauthorized use or access!.',req.headers['user-agent'])
-			return res.status(401).send('==>Unauthorized use or access!.');
-
-		}
-		/*
-		if(req.body.status == '100' && req.body.merchant == process.env.COINPAYMENTMERCHANTID){
-			DB.TransactionDB.findOne({publickey: req.body.custom, txid: req.body.txn_id,status:"100"})
-			.then((response) => {
-				if(response && response!='' && response!=undefined && response!=null){
-					console.log('==> Already credited.........................');
-					return res.status(500).send('==>Already credited');
-				}else{
-					if(!response){
-						var txdata = {
-							email: req.body.email,
-							publickey: req.body.custom,
-							amount: req.body.item_number,
-							valueusd: req.body.amount1,
-							paymentmode: req.body.currency2,
-							paymentval: req.body.amount2,
-							txfee: req.body.fee,
-							txid: req.body.txn_id,
-							status:'100'
-						};
-						var Data = DB.TransactionDB(txdata);
-						var addressTo = req.body.custom;
-						var amount = parseFloat(req.body.item_number);
-						var PH = module.exports.decrypt(process.env.COINOWNERKEY);
-						web3.personal.unlockAccount(process.env.COINOWNER,PH, (err, unlocked) => {
-							if (!unlocked) {
-								return res.status(500).send();
-							}else {
-								Record.transferFrom(process.env.COINOWNER, addressTo, amount * process.env.TOKENDECIMALPLACE, { from: process.env.COINOWNER, gas: 70000 },(err, txid) => {
-									console.log('err',err,'txid',txid)
-									if (txid) {
-											Data.save().then((Sa)=>{
-												res.status(200).send('==>Transaction is successfully Processed!');
-											}).catch((err)=>{
-												console.log('err2',err)
-												res.status(500).send();
-											})
-											console.log('==>Transaction created');
-									}else if(err){
-										console.log('==>Can not credit!,some error occured',err);
-										return res.status(500).send('==>Can not credit!');
-									}else {
-										console.log('==>Can not credit!');
-										return res.status(500).send('==>Can not credit!');
-									}
-								});
-							}
-						});
-					}
-				}
-			})
-			.catch((err) => {
-				console.log('err',err)
-				res.status(500).send();
-			});
-		}
-		else
-		{
-			res.status(201).send();
-		}
-		*/
-	},
 	getTokenDetails:(req, res, next) => {
-		res.status(200).send({ status:true, tokenBal: 0, tokenHolders: 0, walletUsers: 0});
+
+		res.status(200).send({ status:true, tokenBal: 5678300, tokenHolders: 1562, walletUsers: 1644});
 		/*
 		DB.FinalUserDB.find()
 		.then((data) => {
@@ -179,83 +77,75 @@ module.exports = {
 		});
 		*/
 	},
-	sendCurrency:(req, res, next)	=>	{
-			res.send({status:false, message:lang.InsuFuTo})
-			/*
-	    var currencyType = req.body.currencyType;
-	    var amount = req.body.amount;
+
+	sendCurrency: async (req, res, next)	=>	{
+
+			var vo = await rv.validate(req, res)
+			var currencyType = req.body.currencyType;
+			var sendAmount = req.body.amount;
 	    var toAddr = req.body.receiverAddress;
-	    var lang = req.body.localStorage == "zh_CN" ? getLanguageMessage.ch : getLanguageMessage.en
-	    if (web3.isAddress(toAddr)) {
-	        if(currencyType == 'ETH' && (amount+0.0009) <= req.session.etherBal){
-	        	console.log(req.session.passphrase)
-	            var passphrase = module.exports.decrypt(req.session.passphrase);
-	            web3.personal.unlockAccount(req.session.currentUserKey, passphrase, (err, unlocked) => {
-	    		console.log('currencyType',web3.isAddress(toAddr))
-	            	console.log(err,unlocked)
-	                if (!unlocked) {
-	                    return res.send({status:false, message: lang.WeUntoAc});
-	                }else {
-	                    web3.eth.sendTransaction({ from: req.session.currentUserKey, to: toAddr, value: web3.toWei(amount, "ether"),gas: 210000},
-	                        (err, response) => {
-	                            if (response) {
-	                                return res.send({status:true, message: lang.TranSuccP});
-	                            }else {
-	                                return res.send({ status:false, message:lang.TraFaPlea });
-	                            }
-	                        });
-	                    }
-	                });
-	        }else if(currencyType == 'GEM' && amount <= req.session.tokenBal && req.session.etherBal >= 0.005){
-	            var passphrase = module.exports.decrypt(req.session.passphrase);
-	            web3.personal.unlockAccount(req.session.currentUserKey, passphrase, (err, unlocked) => {
-	                if (!unlocked) {
-	                    return res.send({status:false, message:lang.WeUntoAc});
-	                }else {
-                    Record.transfer(toAddr, amount * process.env.TOKENDECIMALPLACE, { from: req.session.currentUserKey, gas: 210000 },
-                        (error, txid) => {
-                            if (txid) {
-                                return res.send({status:true, message: lang.TranSuccP});
-                            }else {
-                                res.send({ status:false, message:lang.TraFaPlea });
-                            }
-                        });
-                    }
-                });
-	        }else{
-	            res.send({status:false, message:lang.InsuFuTo})
-	        }
-	    }else {
-	        res.send({ status:false, message:lang.InvEthAdd})
-	    }
-			*/
+
+			if (currencyType == 'ETH' && vo.valid) {
+
+				l.runtime("Amount to send:", sendAmount, {tag: "buyToken"});
+
+				if (sendAmount) {
+
+								var tx = new Tx(vo.usr, vo.pk)
+								tx.sendETH(vo.usr.publickey, toAddr, sendAmount,
+									 function(data)	{
+										 		if (data.status) {
+													return res.send({status: true, message: vo.lang.TranSuccP,
+															tHash:data.hash, tReceipt:'receipt', addr: toAddr});
+												}
+
+								 })
+
+				} else {
+		 				return res.send({status: false, message: vo.lang.TraFaPlea})
+		 		}
+
+			} else if (currencyType == 'GEM' && vo.valid)	{
+
+					var sendAmount = (parseFloat(req.body.amount)).toFixed(4);
+					l.runtime("Amount to send:", sendAmount, {tag: "buyToken"});
+
+					var tx = new Tx(vo.usr, vo.pk)
+
+					tx.transferERC20(vo.usr.publickey, toAddr, sendAmount,
+						 function(data)	{
+									if (data.status) {
+										l.runtime("Tx sent", data, {tag:	"sendTokenMethod"});
+										return res.send({status: true, message: vo.lang.TranSuccP,
+												tHash:data.hash, tReceipt:'receipt'});
+									} else {
+										 l.runtime("Error ", data.code, {tag: "sendTokenMethod"});
+										 res.send({status: false, message: vo.lang.TraFaPlea });
+									}
+
+					 })
+			}
 	},
-	getTokenTransaction:(req, res, next)	=>	{
-			res.send({ status:false, message:lang.unatoret});
-			/*
-	    var lang = req.query.localStorage == "zh_CN" ? getLanguageMessage.ch : getLanguageMessage.en
-	    var FromEvent = Record.Transfer({_from: req.session.currentUserKey}, { fromBlock: process.env.FROMBLOCK, toBlock: 'latest' });
-	    FromEvent.get((error, fromresult) => {
-	        if (fromresult) {
-	            fromresult.forEach(function(element) {
-	                element.timestamp = web3.eth.getBlock(element.blockNumber).timestamp;
-	            }, this);
-	            var ToEvent = Record.Transfer({_recipient: req.session.currentUserKey}, { fromBlock: process.env.FROMBLOCK, toBlock: 'latest' });
-	            ToEvent.get((err, toresult) => {
-	                if(toresult)
-	                {
-	                    toresult.forEach(function(element){
-	                        element.timestamp = web3.eth.getBlock(element.blockNumber).timestamp;
-	                    }, this);
-	                    result = fromresult.concat(toresult);
-	                    res.send({ status:true, message: result, currentUserKey: req.session.currentUserKey});
-	                }
-	            });
-	        }else{
-	            res.send({ status:false, message:lang.unatoret});
-	        }
-	    });
-			*/
+
+	getTokenTransaction: async (req, res, next)	=>	{
+
+		var vo = await rv.validate(req, res)
+
+			if (vo.valid) {
+					var tx = new Tx(vo.usr, vo.pk)
+					tx.getCacheTxs(function(r)	{
+
+							if (r.status)	{
+									 res.send({status:true, txs: r.data, currentUserKey: vo.usr.publickey});
+							} else {
+								res.send({status:false, message:	vo.lang.unatoret});
+							}
+					})
+
+			} else {
+				res.send({status:false, message:	vo.lang.unatoret});
+			}
+
 	},
 
 	backupPrivateKey:(req,res,next)	=> {

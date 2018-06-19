@@ -23,10 +23,10 @@ function getTokenSale()
 {
     axios.get('/api/gettokensale')
     .then((response) => {
-        if(response.data.success)
+        if(response.data.status)
         {
             document.getElementById("smnx-sold").innerHTML = parseFloat(response.data.tokenBal).toFixed(4);
-            document.getElementById("usd-raised").innerHTML = parseFloat(response.data.tokenBal).toFixed(4);
+            document.getElementById("usd-raised").innerHTML = parseFloat(response.data.tokenBal*0.25).toFixed(4);
             document.getElementById("smnx-holders").innerHTML = response.data.tokenHolders;
             document.getElementById("smnx-wallet-users").innerHTML = response.data.walletUsers;
         }

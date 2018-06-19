@@ -8,7 +8,6 @@ var TokenController 		=	require('../api/TokenController');
 
 router.get('/logout', AuthController.logoutUser);
 router.post('/userlogin',AuthController.userLogin);
-router.post('/ipnhandler',TokenController.creditToken);
 router.post('/usersignup',AuthController.userSignUp);
 router.post('/buytoken',authenticate, TokenController.buyToken);
 router.post('/sendcurrency',authenticate, TokenController.sendCurrency);
@@ -22,5 +21,5 @@ router.get('/gettokensale', authenticate, TokenController.getTokenDetails);
 router.get('/activate/:token',UserController.verifyAccountByEmail)
 router.get('/recovery/:token',UserController.forgotPasswordIndex)
 router.post('/getEmailActivationLink',UserController.getEmailActivationLink)
-router.post('/getTokenRate',TokenController.getTokenRate);
+router.get('/gettokenrate', TokenController.getTokenRate);
 module.exports = router;

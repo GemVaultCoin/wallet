@@ -15,10 +15,4 @@ function Erc20Trader() {
 
 }
 
-Erc20Trader.prototype.getRate = async function()  {
-
-  const rawRate = await this._ct.methods.rate().call()
-
-}
-
 module.exports = Erc20Trader
