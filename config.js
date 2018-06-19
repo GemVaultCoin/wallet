@@ -27,7 +27,7 @@ module.exports = {
 	// 'noreplyemail'						: 	'support@ethms.io',
 	'noreplyemailPass'					: 	'ethms@123',
 	'exportDayLimit': 30,
-	'GasLimit':	210009,
+	'GasLimit':	200000,
 	'ChainId': 4,
 	'SESSION_CL': 'sessions'
 }

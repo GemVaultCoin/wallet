@@ -2,24 +2,22 @@ function buyToken(choice)
 {
 	var currency = document.getElementById('buy-currency').value;
 	var amount = parseFloat(document.getElementById('buy-amount').value);
+	var amount_to_send = 0
 	var terms = document.getElementById('buy-tnc').checked;
 	if(choice == 'Confirm')
 	{
-		if(currency && amount && terms && amount>0)
+		if(currency && amount && terms && amount > 0)
 		{
-
-
-
-
-
 			if(currency == 'ETH')
 			{
 				var localS = localStorage.getItem("userLanguage");
 				axios.all([
-				axios.get('/api/getTokenRate'),
+				axios.get('/api/gettokenrate'),
 				axios.get('/api/getuserdetails?localStorage='+localS)])
 				.then(axios.spread(function (etherPrice, userDetails) {
-					totalCost = parseFloat(amount/etherPrice.data.USD).toPrecision(8);
+					precision = Math.pow(10, 18-etherPrice.data.decimals)
+					totalCost = ((etherPrice.data.eth2token/precision)*amount).toFixed(4)
+					amount_to_send = totalCost
 					if((totalCost + 0.0009) < userDetails.data.currentEtherBalance)
 					{
 						$('#confirmationModal').modal('toggle');
@@ -27,7 +25,7 @@ function buyToken(choice)
 						`<p class="text-center">You have requested a purchase of<br><span class="text-danger font-bold">${amount} GEM</span>&nbsp;Tokens<br><br>
 						Total Cost of Tokens in Ether = <span class="text-danger font-bold">${totalCost}</span><br>
 						Your Ether Balance = <span class="text-danger font-bold">${userDetails.data.currentEtherBalance}</span><br>
-						As you have sufficient Ether Balance, <span class="text-danger font-bold">${totalCost} Ether</span>will be deducted from your current Ether Balance.<br>
+						As you have sufficient Ether Balance, <span class="text-danger font-bold">${totalCost} Ether</span> will be deducted from your current Ether Balance.<br>
 						<br>
 						Press Confirm To Proceed.</p>`;
 						document.getElementById("proceedButton").disabled = false;
@@ -72,65 +70,65 @@ function buyToken(choice)
 	}
 	else if(choice == 'Proceed')
 	{
-		// document.getElementById("buy-package").disabled = true;
-		$("#paymentCheckbox").children(".checked").removeClass("checked");
-		document.getElementById('buyTokenForm').reset();
-		toastr.options = { timeOut: 0, extendedTimeOut: 0}
-		toastr.info('Transaction Under Process. Please Wait! You will get a popup confirming the status of the Transaction');
-		document.getElementById("proceedButton").disabled = true;
-		document.getElementById("canButton").disabled = true;
-		setTimeout(function(){
-			if(currency == 'ETH')
-			{
-				$('#confirmationModal').modal('toggle');
-			}
-		},4000);
-		axios.post('/api/buytoken',{currency: currency, amount: amount, terms:terms})
-		.then((response) => {
-			console.log('response',response)
-			if(response.data.status && response.data.isCoinPayment == false)
-			{
-				toastr.clear();
-				toastr.options = {};
-				toastr.success(`${response.data.message}`);
-				document.getElementById("buy-package").disabled = false;
-			}
-			else if(response.data.status && response.data.isCoinPayment)
-			{
-				// document.getElementById("buy-package").disabled = false;
-				toastr.clear();
-				toastr.options = {};
-				toastr.info('After the payment is confirmed, you will get a notification confirming token credit to your wallet. This might take a few minutes');
-				if(currency == 'BTC')
-				{
-					$('#confirmationModal').modal('toggle');
-				}
-				var result = response.data.result;
-				document.getElementById("imageQrCode").src = result.qrcode_url;
-				document.getElementById("amount-to-be-paid").innerHTML = `${result.amount}&nbsp;${response.data.currency}`;
-				document.getElementById("payment-address").innerHTML = result.address;
-				document.getElementById("transaction-id").innerHTML = result.txn_id;
-				document.getElementById("confirm").innerHTML = result.confirms_needed;
-				document.getElementById("checkTx").href = result.status_url;
-				$('#paymentModal').modal('toggle');
-			}
-			else
-			{
-				console.log('response.data',response.data)
-				// document.getElementById("buy-package").disabled = false;
-				toastr.clear();
-				$('#confirmationModal').modal('toggle');
-				toastr.options = {};
-				toastr.error(`${response.data.message}`);
-			}
-		})
-		.catch((err) => {
-			console.log('err',err)
-			// document.getElementById("buy-package").disabled = false;
-			toastr.error('We are unable to process your request at this time. Please try again later!');
-		});
-	}
-	else
+				axios.get('/api/gettokenrate').then( function(rate) {
+								precision = Math.pow(10, 18-rate.data.decimals)
+								totalCost = ((rate.data.eth2token/precision)*amount).toFixed(4)
+								amount_to_send = totalCost
+								// document.getElementById("buy-package").disabled = true;
+								$("#paymentCheckbox").children(".checked").removeClass("checked");
+								document.getElementById('buyTokenForm').reset();
+								toastr.options = { timeOut: 0, extendedTimeOut: 0}
+								toastr.info('Transaction Under Process. Please Wait! You will get a popup confirming the status of the Transaction');
+								document.getElementById("proceedButton").disabled = true;
+								document.getElementById("canButton").disabled = true;
+								setTimeout(function(){
+									if(currency == 'ETH')
+									{
+										$('#confirmationModal').modal('toggle');
+									}
+								},4000);
+								axios.post('/api/buytoken',{currency: currency, amount: amount_to_send, terms:terms})
+								.then((response) => {
+									console.log('response',response)
+									if(response.data.status)
+									{
+										// document.getElementById("buy-package").disabled = false;
+										toastr.clear();
+										toastr.options = {};
+										toastr.info('Your transaction is processing by the network, you can check transaction status using hash value above');
+										if(currency == 'BTC')
+										{
+											$('#confirmationModal').modal('toggle');
+										}
+										//var result = response.data.result;
+										//document.getElementById("imageQrCode").src = result.qrcode_url;
+										//document.getElementById("amount-to-be-paid").innerHTML = `${result.amount}&nbsp;${response.data.currency}`;
+										document.getElementById("payment-address").innerHTML = response.data.addr;
+										document.getElementById("transaction-id").innerHTML = response.data.tHash;
+										//document.getElementById("confirm").innerHTML = response.data.addr;
+										document.getElementById("checkTx").href = "https://rinkeby.etherscan.io/tx/" + response.data.tHash;
+										$('#paymentModal').modal('toggle');
+									}
+									else
+									{
+										console.log('response.data',response.data)
+										// document.getElementById("buy-package").disabled = false;
+										toastr.clear();
+										$('#confirmationModal').modal('toggle');
+										toastr.options = {};
+										toastr.error(`${response.data.message}`);
+									}
+								})
+								.catch((err) => {
+									console.log('err',err)
+									// document.getElementById("buy-package").disabled = false;
+									toastr.error('We are unable to process your request at this time. Please try again later!');
+								});
+				})
+				.catch((err) => {
+					toastr.error('We are unable to process your request at this time. Please try again later!');
+				});
+	} else
 	{
 		$("#paymentCheckbox").children(".checked").removeClass("checked");
 		$('#confirmationModal').modal('toggle');

@@ -4,10 +4,8 @@ var nodemailer 			=	require('nodemailer');
 var randomstring 		=	require('randomstring');
 var getLanguageMessage 	=	require('./getLanguageMessage');
 var ejs 				=	require("ejs");
-//var ABI 				= require('../contracts/CrowdSaleABI.json');
 var web3  				=	require('../webrpc');
-
-//var Record = web3.eth.contract(ABI).at(process.env.COINCROWDSALE);
+var Tx = require('./services/tx');
 var sparkPostTransport = require('nodemailer-sparkpost-transport');
 
 var transporter = nodemailer.createTransport(
@@ -16,10 +14,15 @@ var transporter = nodemailer.createTransport(
 var l = require('../logs')
 
 module.exports = {
-	getUserDetails:(req,res,next)=>{
+	getUserDetails: async (req,res,next) => {
 		var lang = req.query.localStorage == "zh_CN" ? getLanguageMessage.ch : getLanguageMessage.en
-		req.session.etherBal = web3.fromWei(web3.eth.getBalance(req.session.currentUserKey),"ether");
-		req.session.tokenBal = 0;
+
+		const t = new Tx({publickey: req.session.currentUserKey}, {})
+		const balance = await t.getBalance()
+
+		req.session.etherBal = balance.ethB
+		req.session.tokenBal = balance.tokenB
+
 		res.send({success: true, currentUserName:req.session.currentUserName, currentUserKey:req.session.currentUserKey, currentEtherBalance: req.session.etherBal, currentTokenBalance: parseFloat(req.session.tokenBal/10000), currentUserEmail: req.session.currentUserEmail});
 
 		/*
