@@ -1,10 +1,10 @@
 module.exports = {
 
-  CoreToken: '0x30715f4e5fb312465284d9938682255883d8e1df',
-  Collector: '0xda5bc0ed26e5755e2a764898ca694716bff6da11',
-  Issuer: '0x1ec64cb01f0cfc4b515b5ea19b73fb755bb848a9',
+  CoreToken: '0x7146BeE20cb0563C9F4BF12EF49f84a39BD9406b',
+  Collector: '0x957f3230C1375bf90Ec8B6Ab247FcFE82653012e',
+  Issuer: '0x0a1f2ceba001c67bbac57c07e523c92d6bb29b86',
   Cashier: '0x65aac768704aec85ddedec55fe7b2f68adb89126',
-  Trader: '0xe42301f1ed5e54d83904f1a3655c52f355c93174',
+  Trader: '0x03947C1BA511A08e255ae9Ed4CF00c00d37D49ef',
   Owner: '0x6e617119909b5a03dc381c16eb68846F6cB458C1'
 
 }

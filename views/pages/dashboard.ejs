@@ -36,7 +36,7 @@
                       <span>
                         <span class="tb">Total Balance</span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
                           <span><%= tokenBal %></span> &nbsp;&nbsp;
-                      <span class="text-danger">GEM</span> &nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;&nbsp;&nbsp;
+                      <span class="text-danger">GVC</span> &nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;&nbsp;&nbsp;
                       <%= usdBal %>
                         </span>&nbsp;&nbsp;
                         <span class="text-danger ">USD</span>
@@ -65,7 +65,7 @@
                 <div class="ibox float-e-margins">
                   <div class="ibox-title">
                     <div class="col-sm">
-                      <h5><span class="bsmx"`>Buy GEM</span>&nbsp;&nbsp;</a></h5>
+                      <h5><span class="bsmx"`>Buy GVC</span>&nbsp;&nbsp;</a></h5>
                     </div>
                     <div class="ibox-tools">
                     </div>
@@ -86,7 +86,7 @@
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
-                                <label class="hms">How Much GEM</label>
+                                <label class="hms">How Much GVC</label>
                                 <div>
                                   <input type="text" id="buy-amount" class="form-control" required>
                                 </div>
@@ -144,7 +144,7 @@
                 <div class="ibox float-e-margins">
                   <div class="ibox-title">
                     <span class="label label-info pull-right curr">Current</span>
-                    <h5 class="smxso">GEM Sold</h5>
+                    <h5 class="smxso">GVC Sold</h5>
                   </div>
                   <div class="ibox-content">
                     <h1 class="no-margins"><img src="/img/logo.png" class="smx">&nbsp;&nbsp;<span id="smnx-sold" style="font-size:20px"  >Loading...</span></h1>
@@ -166,7 +166,7 @@
                 <div class="ibox float-e-margins">
                   <div class="ibox-title">
                     <span class="label label-info pull-right curr">Current</span>
-                    <h5 class="smxho">GEM Holders</h5>
+                    <h5 class="smxho">GVC Holders</h5>
                   </div>
                   <div class="ibox-content">
                     <h1 class="no-margins"><i class="fa fa-address-book">&nbsp;&nbsp;</i><span id="smnx-holders" style="font-size:20px">Loading...</span></h1>
@@ -177,7 +177,7 @@
                 <div class="ibox float-e-margins">
                   <div class="ibox-title">
                     <span class="label label-info pull-right curr">Current</span>
-                    <h5 class="smxwu">GEM Wallet Users</h5>
+                    <h5 class="smxwu">GVC Wallet Users</h5>
                   </div>
                   <div class="ibox-content">
                     <h1 class="no-margins"><i class="fa fa-users">&nbsp;&nbsp;</i><span id="smnx-wallet-users" style="font-size:20px">Loading...</span></h1>
@@ -213,23 +213,26 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title bsmc">Buy GEM Coin</h4>
+          <h4 class="modal-title bsmc">Buy GVC Coin</h4>
         </div>
         <div class="modal-body">
+          <!--
           <div class="row text-center m-b-sm">
             <h3 class=" text-center m-t-none m-b-none payDe">Payment Details&nbsp;&nbsp;&nbsp;</h3>
             <img id="imageQrCode" class="m-t-sm" style="width:200px; height:200px;">
           </div>
+        -->
           <div class="row m-b">
               <ul>
-                <li class="m-b-sm"><b class="tmts">Total Amount To Send:</b>&nbsp;&nbsp;<span id="amount-to-be-paid" class="text-danger"></span>&nbsp;&nbsp;<span class="tcn">(Total
-                  Confirms Needed: </span><span class="text-danger" id="confirm"></span>)</li>
+
+                <!--<li class="m-b-sm"><b class="tmts">Total Amount To Send:</b>&nbsp;&nbsp;<span id="amount-to-be-paid" class="text-danger"></span>&nbsp;&nbsp;<span class="tcn">(Total
+                  Confirms Needed: </span><span class="text-danger" id="confirm"></span>)</li>-->
 
                 <li class="m-b-sm"><b class="sta">Send To Address:</b>&nbsp;&nbsp;<span id="payment-address" class="text-danger"></span></li>
 
                 <li class="m-b-sm"><b class="tranI">Transaction ID:</b>&nbsp;&nbsp;<span id="transaction-id" class="text-danger"></span></li>
 
-                <li class="m-b-sm"><b class="selna">Seller Name:</b>&nbsp;&nbsp;<span class="text-danger">GemBank</span></li>
+                <!--<li class="m-b-sm"><b class="selna">Seller Name:</b>&nbsp;&nbsp;<span class="text-danger">GemBank</span></li>-->
 
                 <li><b class="sele">Seller Email:</b>&nbsp;&nbsp;<span class="text-danger">support@GemBank.com</span></li>
               </ul>
@@ -237,7 +240,9 @@
           <div class="row text-center">
             <a class="btn btn-sm btn-primary m-t-n-xs" id='checkTx' target="_blank"><strong class="cps">Check Payment Status</strong></a>
           </div>
-          <p class="text-danger m-t bscm">Once you make a payment, you will need to wait for the transaction to be processed. It will take 10-20 minutes. Once your payment is completed, you will receive a payment notification. In case you have not made the complete payment, you will receive a notice of pending payment. If you have made the full payment, you will receive an email notification and thereafter your tokens will be credited into your account.</p>
+          <p class="text-danger m-t bscm">
+              Your transaction is processing by the network, you can check transaction status using hash value above.
+          </p>
         </div>
       </div>
     </div>

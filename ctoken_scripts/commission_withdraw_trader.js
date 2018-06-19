@@ -1,4 +1,5 @@
 require('dotenv').config()
+var l = require('../logs')
 var Tx = require('ethereumjs-tx');
 
 
@@ -21,12 +22,11 @@ const GasLimit = 2000000
 
 var web3 = require('../webrpc');
 
-async function set_rate()
+async function withdraw()
 {
       const owner = TRADER_OWNER
       const caddr = TRADER_ADDRESS
-      const rate = 7968127.490039840
-                          
+
       var cC = new web3.eth.Contract(abi, caddr,
                                       {
                                         gasPrice: GasPrice,
@@ -34,9 +34,6 @@ async function set_rate()
                                       })
 
       console.log('Owner: ' + await cC.methods.owner().call({from:owner}))
-
-      var prev_rate = await cC.methods.rate().call({from:owner})
-      console.log('Prev rate: ' + prev_rate)
 
       var chainID = ETH_NETWORK
 
@@ -49,7 +46,7 @@ async function set_rate()
                       "gasLimit": web3.utils.toHex(GasLimit),
                       "to": caddr,
                       "value": "0x0",
-                      "data": cC.methods.setRate(rate).encodeABI(),
+                      "data": cC.methods.withdrawCommission().encodeABI(),
                       "chainId": chainID
       };
 
@@ -67,8 +64,7 @@ async function set_rate()
       .on('error', console.log)
       .on('transactionHash', function(hash) {
          console.log(hash)
-         cC.methods.rate().call().then(console.log)
        })
 }
 
-set_rate()
+withdraw()
