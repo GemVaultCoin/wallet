@@ -98,7 +98,7 @@ module.exports = {
 					var mainOptions = {
 						from:process.env.NOREPLYEMAIL,
 						to: user.email,
-						subject:'GemBank Registration',
+						subject:'GemVault Registration',
 						html: data
 					};
 
@@ -219,7 +219,7 @@ module.exports = {
 					var mainOptions = {
 						fromWei:process.env.NOREPLYEMAIL,
 						to: user.email,
-						subject:'GemBank Notification',
+						subject:'GemVault Notification',
 						html: data
 					};
 

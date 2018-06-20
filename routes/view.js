@@ -6,7 +6,7 @@ var DB = require('../db');
 var qrcode = require('qrcode');
 
 router.get('/', function (req, res, next) {
-	res.render('./pages/login', { title: 'GemBank Wallet' });
+	res.render('./pages/login', { title: 'GemVault Wallet' });
 });
 
 router.get('/dashboard', authenticate, function (req, res, next) {
