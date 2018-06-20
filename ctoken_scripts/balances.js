@@ -15,6 +15,7 @@ async function show() {
 
   const colAddr = await trader.methods.collector().call()
   const colB = await web3.eth.getBalance(colAddr);
+  const colBToken = await token.methods.balanceOf(collector.options.address)
   const colIAddrs = await collector.methods.getInvestors().call()
 
   var commAddr = []
@@ -28,6 +29,7 @@ async function show() {
   l.runtime("Commission in trader", web3.utils.fromWei(traderC,'ether'), {rt:"t"})
   l.runtime("Collector addr:", colAddr, {rt:"t"})
   l.runtime("Commission in collector", web3.utils.fromWei(colB), {})
+  l.runtime("Tokens in collector", colBToken, {})
   l.runtime("Investor addresses", commAddr, {})
 
 }
