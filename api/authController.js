@@ -36,7 +36,7 @@ function notifyAndCreate(params, pk, res) {
 						 var mainOptions = {
 							 from:process.env.NOREPLYEMAIL,
 							 to: params.email,
-							 subject:'GemBank Registration',
+							 subject:'GemVault Registration',
 							 html: data
 						 };
 
