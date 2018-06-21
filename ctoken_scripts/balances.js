@@ -15,7 +15,7 @@ async function show() {
 
   const colAddr = await trader.methods.collector().call()
   const colB = await web3.eth.getBalance(colAddr);
-  const colBToken = await token.methods.balanceOf(collector.options.address)
+  const colBToken = await token.methods.balanceOf(collector.options.address).call()
   const colIAddrs = await collector.methods.getInvestors().call()
 
   var commAddr = []

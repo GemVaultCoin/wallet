@@ -44,7 +44,7 @@ router.get('/transactions', authenticate, function (req, res, next) {
 router.get('/send', authenticate, function (req, res, next) {
 	axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
 	.then((value) => {
-		res.render('./pages/send', { title: 'Send GEM/Ether', userName: req.session.currentUserName, tokenBal: parseFloat(req.session.tokenBal/10000).toFixed(4), usdBal: parseFloat(req.session.tokenBal/10000).toFixed(4), ethBal: parseFloat(req.session.etherBal).toFixed(4), usdEthBal: parseFloat(req.session.etherBal * value.data.USD).toFixed(4),profileName:req.session.currentUserName, userEmail:req.session.currentUserEmail, etherAddress: req.session.currentUserKey});
+		res.render('./pages/send', { title: 'Send GVC/Ether', userName: req.session.currentUserName, tokenBal: parseFloat(req.session.tokenBal/10000).toFixed(4), usdBal: parseFloat(req.session.tokenBal/10000).toFixed(4), ethBal: parseFloat(req.session.etherBal).toFixed(4), usdEthBal: parseFloat(req.session.etherBal * value.data.USD).toFixed(4),profileName:req.session.currentUserName, userEmail:req.session.currentUserEmail, etherAddress: req.session.currentUserKey});
 	})
 	.catch((err) => {
 		res.render('./pages/common', { title: 'Error!', heading: 'Technical Error Occoured!', message: 'We are unable to verify the account due to some technical issues. Please try again.', linkHref: '/', linkText: 'Click Here To Login' });
