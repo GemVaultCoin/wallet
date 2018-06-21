@@ -6,7 +6,7 @@ module.exports = {
 
 	'keystorePath':	'/home/ubuntu/.ethereum',//for importing private key
 	'IpcProvider': '/Users/koalevskii/Library/Ethereum/geth.ipc',
-	'RpcProvider': 'https://rinkeby.infura.io/8m9GjFe5QIkDl78RDNdS',
+	'RpcProvider': 'https://mainnet.infura.io/8m9GjFe5QIkDl78RDNdS',
 
 	'fromBlock': '4099813',
 
