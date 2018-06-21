@@ -28,6 +28,6 @@ module.exports = {
 	'noreplyemailPass'					: 	'ethms@123',
 	'exportDayLimit': 30,
 	'GasLimit':	200000,
-	'ChainId': 4,
+	'ChainId': 1,
 	'SESSION_CL': 'sessions'
 }
