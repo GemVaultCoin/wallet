@@ -33,7 +33,7 @@ function signUp() {
             });
         	return false
         }
-		if (name && email && password && confpassword && code && phoneno && terms) {
+		if (name && email && password && confpassword && phoneno && terms) {
 			if (password == confpassword) {
 				toastr.info(LANG.SignPW);
 				$('.subm').html('<i class="fa fa-spinner fa-spin"></i>')
