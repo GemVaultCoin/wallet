@@ -6,7 +6,7 @@
     <%= title %>
   </title>
   <% include ../partials/head %>
-  <link href="/css/intlTelInput.css" rel="stylesheet">
+  <!--<link href="/css/intlTelInput.css" rel="stylesheet">-->
 </head>
 
 <body>
@@ -130,9 +130,9 @@
                 <input type="password" placeholder="Re-Enter Password" id='reg_password_confirm' name='confirmedPassword' class="form-control"  autocomplete="off">
               </div>
               <div class="form-group">
-                <label class="phon">Phone Number</label><br/>
-                    <input type="Number" id="mobileNumberSignup" class="form-control m-input" placeholder="Mobile No.">
-                     <small class="text-danger float-right" id="mobileNumberSignupe"></small>
+                <label>Phone Number</label><br/>
+                    <input type="Tel" id="mobileNumberSignup" class="form-control m-input" placeholder="Mobile No.">
+                    <!-- <small class="text-danger float-right" id="mobileNumberSignupe"></small> -->
               </div><br><br>
               <div class="form-group">
                 <label> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" id="reg_tnc" class="i-checks" style="position: absolute; opacity: 0;" ><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>&nbsp;&nbsp;&nbsp;<span class="iat">I Accept The</span> <a href="" target="_blank"><span class="tac">Terms & Conditions</span></a></label>
@@ -159,17 +159,18 @@
 <% include ../partials/script %>
 <script src="/lib/js/sha256.min.js"></script>
 <script src="/js/reset.js"></script>
-<script src="/js/intlTelInput.js"></script>
-  <script type="text/javascript">
-    $(function () {
-      $('.i-checks').iCheck({
-        checkboxClass: 'icheckbox_square-green',
-        radioClass: 'iradio_square-green',
-      });
+<script type="text/javascript">
+  $(function () {
+    $('.i-checks').iCheck({
+      checkboxClass: 'icheckbox_square-green',
+      radioClass: 'iradio_square-green',
     });
-    signUp();
-    loginUser();
-  </script>
+  });
+  signUp();
+  loginUser();
+</script>
+<!--<script src="/js/intlTelInput.js"></script>
+
    <script>
       $("#mobileNumberSignup").intlTelInput({
         initialCountry: "auto",
@@ -180,5 +181,5 @@
             });
           }
       });
-   </script>
+   </script>-->
 </html>
