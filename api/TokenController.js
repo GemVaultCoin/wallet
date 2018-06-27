@@ -56,7 +56,7 @@ module.exports = {
 
 	getTokenDetails:(req, res, next) => {
 
-		res.status(200).send({ status:true, tokenBal: 5678300, tokenHolders: 1562, walletUsers: 1644});
+		res.status(200).send({ status:true, tokenBal: 9500000, tokenHolders: 6, walletUsers: 4});
 		/*
 		DB.FinalUserDB.find()
 		.then((data) => {
