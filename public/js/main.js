@@ -6,16 +6,15 @@ function getLocalBuyMessageText(lang, amount, totalCost, currentEtherBalance) {
 			因为您的以太币的余额不足, <span class="text-danger font-bold">${totalCost} Ether</span> 您将被转向付款平台进行付款.<br>
 			<br>
 			请按确认继续.</p>`;
-			alert(stmpl)
 			return stmpl
 		} else {
-			return
-			`<p class="text-center buy_mes_1">You have requested a purchase of<br><span class="text-danger font-bold">${amount} GVC</span>&nbsp;Tokens<br><br>
+			var stmpl = `<p class="text-center buy_mes_1">You have requested a purchase of<br><span class="text-danger font-bold">${amount} GVC</span>&nbsp;Tokens<br><br>
 			Total Cost of Tokens in Ether = <span class="text-danger font-bold">${totalCost}</span><br>
 			Your Ether Balance = <span class="text-danger font-bold">${currentEtherBalance}</span><br>
 			As you have sufficient Ether Balance, <span class="text-danger font-bold">${totalCost} Ether</span> will be deducted from your current Ether Balance.<br>
 			<br>
 			Press Confirm To Proceed.</p>`
+			return stmpl
 		}
 
 }
