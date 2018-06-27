@@ -1,3 +1,27 @@
+function getLocalBuyMessageText(lang, amount, totalCost, currentEtherBalance) {
+		alert(lang)
+		if (lang == 'zh_CN') {
+			return
+			`<p class="text-center buy_mes_1">你已经要求购买<br><span class="text-danger font-bold">${amount} 个GVC</span>&nbsp;代币<br><br>
+			总共的代币花费 = <span class="text-danger font-bold">${totalCost}以太币</span><br>
+			您的以太币余额 = <span class="text-danger font-bold">${currentEtherBalance}</span><br>
+			因为您的以太币的余额不足, <span class="text-danger font-bold">${totalCost} Ether</span> 您将被转向付款平台进行付款.<br>
+			<br>
+			请按确认继续.</p>`
+		} else {
+			return
+			`<p class="text-center buy_mes_1">You have requested a purchase of<br><span class="text-danger font-bold">${amount} GVC</span>&nbsp;Tokens<br><br>
+			Total Cost of Tokens in Ether = <span class="text-danger font-bold">${totalCost}</span><br>
+			Your Ether Balance = <span class="text-danger font-bold">${currentEtherBalance}</span><br>
+			As you have sufficient Ether Balance, <span class="text-danger font-bold">${totalCost} Ether</span> will be deducted from your current Ether Balance.<br>
+			<br>
+			Press Confirm To Proceed.</p>`
+
+		}
+
+}
+
+
 function buyToken(choice)
 {
 	var currency = document.getElementById('buy-currency').value;
@@ -21,13 +45,7 @@ function buyToken(choice)
 					if((totalCost + 0.0009) < userDetails.data.currentEtherBalance)
 					{
 						$('#confirmationModal').modal('toggle');
-						document.getElementById("payment-terms").innerHTML =
-						`<p class="text-center">You have requested a purchase of<br><span class="text-danger font-bold">${amount} GEM</span>&nbsp;Tokens<br><br>
-						Total Cost of Tokens in Ether = <span class="text-danger font-bold">${totalCost}</span><br>
-						Your Ether Balance = <span class="text-danger font-bold">${userDetails.data.currentEtherBalance}</span><br>
-						As you have sufficient Ether Balance, <span class="text-danger font-bold">${totalCost} Ether</span> will be deducted from your current Ether Balance.<br>
-						<br>
-						Press Confirm To Proceed.</p>`;
+						document.getElementById("payment-terms").innerHTML = getLocalBuyMessageText(localS, amount, totalCost, userDetails.data.currentEtherBalance);
 						document.getElementById("proceedButton").disabled = false;
 						document.getElementById("canButton").disabled = false;
 					}
@@ -35,7 +53,7 @@ function buyToken(choice)
 					{
 						$('#confirmationModal').modal('toggle');
 						document.getElementById("payment-terms").innerHTML =
-						`<p class="text-center">You have requested a purchase of<br><span class="text-danger font-bold">${amount} GEM</span>&nbsp;Tokens<br><br>
+						`<p class="text-center">You have requested a purchase of<br><span class="text-danger font-bold">${amount} GVC</span>&nbsp;Tokens<br><br>
 						Total Cost of Tokens in Ether = <span class="text-danger font-bold">${totalCost}</span><br>
 						Your Ether Balance = <span class="text-danger font-bold">${userDetails.data.currentEtherBalance}</span><br>
 						As you have in-sufficient Ether Balance, <span class="text-danger font-bold">You will be directed towards the payment gateway for payment.</span><br>
@@ -53,7 +71,7 @@ function buyToken(choice)
 			{
 				$('#confirmationModal').modal('toggle');
 				document.getElementById("payment-terms").innerHTML =
-				`<p class="text-center">You have requested a purchase of<br><span class="text-danger font-bold">${amount} GEM</span>&nbsp;Tokens<br><br>
+				`<p class="text-center">You have requested a purchase of<br><span class="text-danger font-bold">${amount} GVC</span>&nbsp;Tokens<br><br>
 				Total Cost of Tokens in USD = <span class="text-danger font-bold">$${amount}</span><br>
 				Your Payment Mode = <span class="text-danger font-bold">${currency}</span><br>
 				As you have selected BTC as the payment mode,&nbsp;<span class="text-danger font-bold">You will be directed towards the payment gateway for payment.</span><br>
