@@ -48,7 +48,7 @@ function getTokenSale()
 
 function timer(){
     var LANG = localStorage.getItem("userLanguage") == "zh_CN" ? lang.ch :lang.en;
-    var countDownDate = new Date(1524335787000);
+    var countDownDate = new Date("2018-07-08");
     var x = setInterval(function() {
         var now = new Date().getTime();
         var distance = countDownDate - now;
