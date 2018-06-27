@@ -1,5 +1,4 @@
 function getLocalBuyMessageText(lang, amount, totalCost, currentEtherBalance) {
-		alert(lang)
 		if (lang == 'zh_CN') {
 			return
 			`<p class="text-center buy_mes_1">你已经要求购买<br><span class="text-danger font-bold">${amount} 个GVC</span>&nbsp;代币<br><br>
@@ -16,7 +15,6 @@ function getLocalBuyMessageText(lang, amount, totalCost, currentEtherBalance) {
 			As you have sufficient Ether Balance, <span class="text-danger font-bold">${totalCost} Ether</span> will be deducted from your current Ether Balance.<br>
 			<br>
 			Press Confirm To Proceed.</p>`
-
 		}
 
 }
