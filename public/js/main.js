@@ -1,12 +1,13 @@
 function getLocalBuyMessageText(lang, amount, totalCost, currentEtherBalance) {
 		if (lang == 'zh_CN') {
-			return
-			`<p class="text-center buy_mes_1">你已经要求购买<br><span class="text-danger font-bold">${amount} 个GVC</span>&nbsp;代币<br><br>
+			var stmpl = `<p class="text-center buy_mes_1">你已经要求购买<br><span class="text-danger font-bold">${amount} 个GVC</span>&nbsp;代币<br><br>
 			总共的代币花费 = <span class="text-danger font-bold">${totalCost}以太币</span><br>
 			您的以太币余额 = <span class="text-danger font-bold">${currentEtherBalance}</span><br>
 			因为您的以太币的余额不足, <span class="text-danger font-bold">${totalCost} Ether</span> 您将被转向付款平台进行付款.<br>
 			<br>
-			请按确认继续.</p>`
+			请按确认继续.</p>`;
+			alert(stmpl)
+			return stmpl
 		} else {
 			return
 			`<p class="text-center buy_mes_1">You have requested a purchase of<br><span class="text-danger font-bold">${amount} GVC</span>&nbsp;Tokens<br><br>
