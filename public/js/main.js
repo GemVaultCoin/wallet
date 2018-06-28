@@ -16,7 +16,27 @@ function getLocalBuyMessageText(lang, amount, totalCost, currentEtherBalance) {
 			Press Confirm To Proceed.</p>`
 			return stmpl
 		}
+}
 
+function getLocalBuyDeclineMessageText(lang, amount, totalCost, currentEtherBalance)	{
+	if (lang == 'zh_CN') {
+		var stmpl = `<p class="text-center buy_mes_1">您要求购买<br><span class="text-danger font-bold">${amount} 个GVC</span>&nbsp;代币<br><br>
+		以太代币总成本 = <span class="text-danger font-bold">${totalCost}以太币</span><br>
+		您的以太币余额 = <span class="text-danger font-bold">${currentEtherBalance}</span><br>
+		请给您的钱包充值
+		<br>
+		<br>
+		请按“确认键”继续.</p>`;
+		return stmpl
+	} else {
+		var stmpl = `<p class="text-center">You have requested a purchase of<br><span class="text-danger font-bold">${amount} GVC</span>&nbsp;Tokens<br><br>
+								Total Cost of Tokens in Ether = <span class="text-danger font-bold">${totalCost}</span><br>
+								Your Ether Balance = <span class="text-danger font-bold">${currentEtherBalance}</span><br>
+								You have in-sufficient Ether Balance, <span class="text-danger font-bold">Top-up your account</span><br>
+								<br>
+								Press Confirm To Proceed.</p>`
+		return stmpl
+	}
 }
 
 
@@ -50,13 +70,7 @@ function buyToken(choice)
 					else
 					{
 						$('#confirmationModal').modal('toggle');
-						document.getElementById("payment-terms").innerHTML =
-						`<p class="text-center">You have requested a purchase of<br><span class="text-danger font-bold">${amount} GVC</span>&nbsp;Tokens<br><br>
-						Total Cost of Tokens in Ether = <span class="text-danger font-bold">${totalCost}</span><br>
-						Your Ether Balance = <span class="text-danger font-bold">${userDetails.data.currentEtherBalance}</span><br>
-						As you have in-sufficient Ether Balance, <span class="text-danger font-bold">You will be directed towards the payment gateway for payment.</span><br>
-						<br>
-						Press Confirm To Proceed.</p>`;
+						document.getElementById("payment-terms").innerHTML = getLocalBuyDeclineMessageText(localS, amount, totalCost, userDetails.data.currentEtherBalance);
 						document.getElementById("proceedButton").disabled = false;
 						document.getElementById("canButton").disabled = false;
 					}
