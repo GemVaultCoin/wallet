@@ -105,7 +105,7 @@ module.exports = {
 		 				return res.send({status: false, message: vo.lang.TraFaPlea})
 		 		}
 
-			} else if (currencyType == 'GEM' && vo.valid)	{
+			} else if (currencyType == 'GVC' && vo.valid)	{
 
 					var sendAmount = (parseFloat(req.body.amount)).toFixed(4);
 					l.runtime("Amount to send:", sendAmount, {tag: "buyToken"});
