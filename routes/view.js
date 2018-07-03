@@ -12,7 +12,7 @@ router.get('/', function (req, res, next) {
 router.get('/dashboard', authenticate, function (req, res, next) {
 	axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
 	.then((value) => {
-		res.render('./pages/dashboard', { title: 'Dashboard', userName: req.session.currentUserName, icoEndDate: req.icoEndDate, tokenBal: parseFloat(req.session.tokenBal/10000).toFixed(4), usdBal: parseFloat(req.session.tokenBal/10000).toFixed(4), ethBal: parseFloat(req.session.etherBal).toFixed(4), usdEthBal: parseFloat(req.session.etherBal * value.data.USD).toFixed(4), profileName:req.session.currentUserName, userEmail:req.session.currentUserEmail, etherAddress: req.session.currentUserKey});
+		res.render('./pages/dashboard', { title: 'Dashboard', userName: req.session.currentUserName, icoEndDate: req.icoEndDate, tokenBal: parseFloat(req.session.tokenBal/10000).toFixed(4), usdBal: parseFloat((req.session.tokenBal/10000)*process.env.RATE).toFixed(4), ethBal: parseFloat(req.session.etherBal).toFixed(4), usdEthBal: parseFloat(req.session.etherBal * value.data.USD).toFixed(4), profileName:req.session.currentUserName, userEmail:req.session.currentUserEmail, etherAddress: req.session.currentUserKey});
 	})
 	.catch((err) => {
 		res.render('./pages/common', { title: 'Error!', heading: 'Technical Error Occoured!', message: 'We are unable to verify the account due to some technical issues. Please try again.', linkHref: '/', linkText: 'Click Here To Login' });
@@ -23,7 +23,7 @@ router.get('/address', authenticate, function (req, res, next) {
 	axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
 	.then((value) => {
 		qrcode.toDataURL(`ethereum:${req.session.currentUserKey}`, {version: 4, errorCorrectionLevel:'M'},(err, qrImage) => {
-			res.render('./pages/address', { title: 'Address', etherAddress: req.session.currentUserKey, userName: req.session.currentUserName, qrImage: qrImage, tokenBal: parseFloat(req.session.tokenBal/10000).toFixed(4), usdBal: parseFloat(req.session.tokenBal/10000).toFixed(4), ethBal: parseFloat(req.session.etherBal).toFixed(4), usdEthBal: parseFloat(req.session.etherBal * value.data.USD).toFixed(4),profileName:req.session.currentUserName, userEmail:req.session.currentUserEmail});
+			res.render('./pages/address', { title: 'Address', etherAddress: req.session.currentUserKey, userName: req.session.currentUserName, qrImage: qrImage, tokenBal: parseFloat(req.session.tokenBal/10000).toFixed(4), usdBal: parseFloat((req.session.tokenBal/10000)*process.env.RATE).toFixed(4), ethBal: parseFloat(req.session.etherBal).toFixed(4), usdEthBal: parseFloat(req.session.etherBal * value.data.USD).toFixed(4),profileName:req.session.currentUserName, userEmail:req.session.currentUserEmail});
 		});
 	})
 	.catch((err) => {
@@ -34,7 +34,7 @@ router.get('/address', authenticate, function (req, res, next) {
 router.get('/transactions', authenticate, function (req, res, next) {
 	axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
 	.then((value) => {
-		res.render('./pages/transactions', { title: 'Transaction History', userName: req.session.currentUserName, tokenBal: parseFloat(req.session.tokenBal/10000).toFixed(4), usdBal: parseFloat(req.session.tokenBal/10000).toFixed(4), ethBal: parseFloat(req.session.etherBal).toFixed(4), usdEthBal: parseFloat(req.session.etherBal * value.data.USD).toFixed(4),profileName:req.session.currentUserName, userEmail:req.session.currentUserEmail, etherAddress: req.session.currentUserKey});
+		res.render('./pages/transactions', { title: 'Transaction History', userName: req.session.currentUserName, tokenBal: parseFloat(req.session.tokenBal/10000).toFixed(4), usdBal: parseFloat((req.session.tokenBal/10000)*process.env.RATE).toFixed(4), ethBal: parseFloat(req.session.etherBal).toFixed(4), usdEthBal: parseFloat(req.session.etherBal * value.data.USD).toFixed(4),profileName:req.session.currentUserName, userEmail:req.session.currentUserEmail, etherAddress: req.session.currentUserKey});
 	})
 	.catch((err) => {
 		res.render('./pages/common', { title: 'Error!', heading: 'Technical Error Occoured!', message: 'We are unable to verify the account due to some technical issues. Please try again.', linkHref: '/', linkText: 'Click Here To Login' });
@@ -44,7 +44,7 @@ router.get('/transactions', authenticate, function (req, res, next) {
 router.get('/send', authenticate, function (req, res, next) {
 	axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
 	.then((value) => {
-		res.render('./pages/send', { title: 'Send GVC/Ether', userName: req.session.currentUserName, tokenBal: parseFloat(req.session.tokenBal/10000).toFixed(4), usdBal: parseFloat(req.session.tokenBal/10000).toFixed(4), ethBal: parseFloat(req.session.etherBal).toFixed(4), usdEthBal: parseFloat(req.session.etherBal * value.data.USD).toFixed(4),profileName:req.session.currentUserName, userEmail:req.session.currentUserEmail, etherAddress: req.session.currentUserKey});
+		res.render('./pages/send', { title: 'Send GVC/Ether', userName: req.session.currentUserName, tokenBal: parseFloat(req.session.tokenBal/10000).toFixed(4), usdBal: parseFloat((req.session.tokenBal/10000)*process.env.RATE).toFixed(4), ethBal: parseFloat(req.session.etherBal).toFixed(4), usdEthBal: parseFloat(req.session.etherBal * value.data.USD).toFixed(4),profileName:req.session.currentUserName, userEmail:req.session.currentUserEmail, etherAddress: req.session.currentUserKey});
 	})
 	.catch((err) => {
 		res.render('./pages/common', { title: 'Error!', heading: 'Technical Error Occoured!', message: 'We are unable to verify the account due to some technical issues. Please try again.', linkHref: '/', linkText: 'Click Here To Login' });
